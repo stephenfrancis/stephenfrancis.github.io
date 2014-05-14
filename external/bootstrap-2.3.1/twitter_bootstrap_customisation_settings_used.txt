@@ -1,0 +1,19 @@
+
+	Twitter-Bootstrap Customisation Settings Used
+	
+	
+	@linkColor			#54075B
+	@sansFontFamily		Arial
+	@baseFontSize		10pt
+	@headingsColor		#54075B
+	@inputBorder		#54075B
+	@navbarBackground	#54075B
+	@dropdownLinkColor	#54075B
+	
+	
+	@bodyBackground		#F4F7F8
+	@serifFontFamily	'Trebuchet MS'
+	@baseFontFamily		@serifFontFamily
+	
+	@navbarLinkBackgroundActive		darken(@navbarBackground, 25%)
+	@navbarLinkBackgroundHover		darken(@navbarBackground, 50%)
