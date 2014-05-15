@@ -2,16 +2,18 @@
 <html lang="en">
 	<head>
 		<title>Mancala</title>
+		<link rel="stylesheet" type="text/css" href="../external/bootstrap-2.3.1/css/bootstrap.min.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../external/bootstrap-2.3.1/css/bootstrap-responsive.min.css" />
 		<style type="text/css">
 #MancalaBoard {
-	table-layout: separate;
+	border-collapse: separate;
 }
 #MancalaBoard > tbody > tr > td		{
-			margin: 5px 10px;
-			border: 1px solid black;
-			border-radius: 10px;
-			padding: 5px 10px;
-			width: 16px;
+	margin: 5px 10px;
+	border: 1px solid black;
+	border-radius: 10px;
+	padding: 5px 10px;
+	width: 16px;
 }
 #MancalaBoard > tbody > tr > td.ActiveA {
 	background-color: LightGreen;
@@ -21,9 +23,38 @@
 	background-color: LightBlue;
 	cursor: pointer;
 }
-
 		</style>
-		<script type="text/javascript" src="../external/jquery.core/jquery-1.7.2.min.js"> </script>								
+	</head>
+	<body>
+		<div class="container-fluid">
+			<h1>Mancala</h1>
+			<table id="MancalaBoard">
+				<tr>
+					<td id="cell_0" rowspan="2"></td>
+					<td id="cell_1"></td>
+					<td id="cell_2"></td>
+					<td id="cell_3"></td>
+					<td id="cell_4"></td>
+					<td id="cell_5"></td>
+					<td id="cell_6"></td>
+					<td id="cell_7"></td>
+					<td id="cell_8"></td>
+					<td id="cell_9" rowspan="2"></td>
+				</tr>
+				<tr>
+					<td id="cell_17"></td>
+					<td id="cell_16"></td>
+					<td id="cell_15"></td>
+					<td id="cell_14"></td>
+					<td id="cell_13"></td>
+					<td id="cell_12"></td>
+					<td id="cell_11"></td>
+					<td id="cell_10"></td>
+				</tr>
+			</table>
+			<p id="Message"></p>
+		</div>
+		<script type="text/javascript" src="../external/jquery.core/jquery-1.7.2.min.js"></script>								
 		<script>
 			x = {
 				cell: [],			// number of counters in each cell
@@ -104,35 +135,6 @@
 				drawBoard(message);
 			}
 
-
 		</script>
-	</head>
-	<body>
-		<h1>Mancala</h1>
-		<table id="MancalaBoard">
-			<tr>
-				<td id="cell_0" rowspan="2"></td>
-				<td id="cell_1"></td>
-				<td id="cell_2"></td>
-				<td id="cell_3"></td>
-				<td id="cell_4"></td>
-				<td id="cell_5"></td>
-				<td id="cell_6"></td>
-				<td id="cell_7"></td>
-				<td id="cell_8"></td>
-				<td id="cell_9" rowspan="2"></td>
-			</tr>
-			<tr>
-				<td id="cell_17"></td>
-				<td id="cell_16"></td>
-				<td id="cell_15"></td>
-				<td id="cell_14"></td>
-				<td id="cell_13"></td>
-				<td id="cell_12"></td>
-				<td id="cell_11"></td>
-				<td id="cell_10"></td>
-			</tr>
-		</table>
-		<p id="Message"></p>
 	</body>
 </html>

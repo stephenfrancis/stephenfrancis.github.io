@@ -61,8 +61,38 @@ body {
 	margin-right: 4px;
 }
 		</style>
-		<script type="text/javascript" src="../external/jquery.core/jquery-1.7.2.min.js"> </script>								
-		<script type="text/javascript" src="../external/bootstrap-2.3.1/js/bootstrap.min.js"> </script>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<h1>Crossword Creator</h1>
+			<div class="row-fluid">
+				<div class="span6">
+					<h2>1. Define the Grid Size</h2>
+					<input id="grid_size" type="text" class="input-mini"></input>
+					<button class="btn" id="reset">Reset</button>
+					<h2>2. Draw the Grid</h2>
+					<button class="btn" id="mode_infill">Infill Mode</button>
+					<button class="btn" id="mode_outfill">Outfill Mode</button>
+					<button class="btn" id="number">Number</button>
+					<h2>3. Enter the Words</h2>
+					<button class="btn" id="suggest">Suggest</button>
+					<button class="btn" id="clear">Clear</button>
+					<span id="suggest_msg"></span>
+					<h2>4. Define the Clues</h2>
+					<h3>Across</h3>
+					<div id="across" class="clues"></div>
+					<h3>Down</h3>
+					<div id="down"   class="clues"></div>
+				</div>
+				<div class="span6">
+					<div class="affix">
+						<table id="xword"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="../external/jquery.core/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="../external/bootstrap-2.3.1/js/bootstrap.min.js"></script>
 		<script>
 			$(document).ready(function() {
 				setup(11);
@@ -575,35 +605,5 @@ body {
 			};
 
 		</script>
-	</head>
-	<body>
-		<div class="container-fluid">
-			<h1>Crossword Creator</h1>
-			<div class="row-fluid">
-				<div class="span6">
-					<h2>1. Define the Grid Size</h2>
-					<input id="grid_size" type="text" class="input-mini"></input>
-					<button class="btn" id="reset">Reset</button>
-					<h2>2. Draw the Grid</h2>
-					<button class="btn" id="mode_infill">Infill Mode</button>
-					<button class="btn" id="mode_outfill">Outfill Mode</button>
-					<button class="btn" id="number">Number</button>
-					<h2>3. Enter the Words</h2>
-					<button class="btn" id="suggest">Suggest</button>
-					<button class="btn" id="clear">Clear</button>
-					<span id="suggest_msg"></span>
-					<h2>4. Define the Clues</h2>
-					<h3>Across</h3>
-					<div id="across" class="clues"></div>
-					<h3>Down</h3>
-					<div id="down"   class="clues"></div>
-				</div>
-				<div class="span6">
-					<div class="affix">
-						<table id="xword"></table>
-					</div>
-				</div>
-			</div>
-		</div>
 	</body>
 </html>
