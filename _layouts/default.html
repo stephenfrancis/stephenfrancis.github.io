@@ -1,8 +1,20 @@
 {% include top.html %}
 
-<body class="wrap">
-  {% include header.html %}
-  {{ content }}
-  {% include footer.html %}
+<body>
+	{% include header.html %}
+  	<div class="container-fluid">
+  		<div class="row-fluid">
+			<div class="span2 visible-desktop">
+				<div class="affix">
+  					{% include sidebar.html %}
+				</div>
+			</div>
+			<div class="span10">
+				<h1>{{ title }}</h1>
+				{{ content }}
+			</div>
+		</div>
+	</div>
+	{% include footer.html %}
 </body>
 </html>
