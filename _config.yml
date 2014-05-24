@@ -1,0 +1,6 @@
+defaults:
+  -
+    scope:
+      path: "" # empty string for all files
+    values:
+      excerpt_separator: "\r\n\r\n"
