@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: default
 title: Learning Facts at School
 ---
 
@@ -9,3 +9,13 @@ Of the many stupid ideas in education at the moment. the stupidest is that, with
 See, for an example of this view espoused,
 http://www.standard.co.uk/news/education/tomb-raider-gaming-boss-set-to-open-free-school-which-focuses-on-computer-skills-8979639.html
 
+The idea rests on some questionable assumptions:
+- That our memories are constrained by a fixed amount of "storage" - like those of computers - that shouldn't be needlessly
+	filled up with facts that can be found on the Internet only as and when required.
+- That the precious hours of the school day can be better devoted to teaching "higher thought" - analysis, reasoning, and
+	such like, without particularly needing a reservior of facts to draw upon.
+- That in the rest of our lives, our abilities to draw good conclusions and solve tough problems needs only this reasoning
+	and analytical ability to sit within our brains - the facts can be retrieved from the Internet again, as and when
+	necessary.
+
+ 
