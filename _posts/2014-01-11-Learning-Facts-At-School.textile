@@ -2,7 +2,6 @@
 layout: default
 title: Learning Facts at School
 ---
-
 Of the many stupid ideas in education at the moment. the stupidest is that, with the advent of the Internet,
  there is no longer a need for facts to be taught or learnt in school.
 
