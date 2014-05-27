@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>WordSolver</title>
+		<link rel="stylesheet" type="text/css" href="../external/bootstrap-2.3.1/css/bootstrap.min.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../external/bootstrap-2.3.1/css/bootstrap-responsive.min.css" />
+		<style type="text/css">
+body {
+	font-family: Arial;
+}
+		</style>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<h1>WordSolver</h1>
+			<div class="row-fluid">
+				<div class="span6">
+					<p>Enter a JavaScript Regular Expression and see its matches against a list of British English words</p> 
+					<input id="pattern" type="text" class="input-medium"></input>
+					<button class="btn" id="go">Go</button>
+					<div id="results"></div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="../external/jquery.core/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="../external/bootstrap-2.3.1/js/bootstrap.min.js"></script>
+		<script>
+			var o = {};
+
+			$(document).on("change", "#pattern", function(event) {
+				var regex,
+					i,
+					results = $("#results"),
+					count = 0;
+			    loadWordlist();
+			    results.empty();
+			    try {
+				    regex = new RegExp($(event.target).val());
+			    } catch (e) {
+			    	alert("Invalid regular expression");
+			    	return;
+			    }
+			    for (i = 0; i < o.words.length; i += 1) {
+			    	if (regex.exec(o.words[i])) {
+			    		results.append(o.words[i] + "<br/>");
+			    		count += 1;
+			    	}
+			    }
+			    results.append(count + " words matched");
+			});
+
+			function loadWordlist() {
+			    if (!o.words) {
+					$.ajax({ url: "../wordlists/2of4brif.txt", type: "GET", async: false,
+						success: function(data_back) {
+							o.words = data_back.split("\r\n");
+						}
+					});
+			    }
+				return o.words;
+			}
+
+
+		</script>
+	</body>
+</html>
