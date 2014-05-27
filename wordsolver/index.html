@@ -15,9 +15,15 @@ body {
 			<h1>WordSolver</h1>
 			<div class="row-fluid">
 				<div class="span6">
-					<p>Enter a JavaScript Regular Expression and see its matches against a list of British English words</p> 
-					<input id="pattern" type="text" class="input-medium"></input>
-					<button class="btn" id="go">Go</button>
+					<p>Enter a <a href="http://www.javascriptkit.com/javatutors/re.shtml" target="_blank">JavaScript 
+						Regular Expression</a> and see its matches against a list of 
+						<a href="http://wordlist.sourceforge.net/12dicts-readme-r5.html" target="_blank">British English
+						words</a>:
+					</p>
+					<div class="form-inline">
+						<input id="pattern" type="text" class="input-large"></input>
+						<button class="btn" id="go">Go</button>
+					</div>
 					<div id="results"></div>
 				</div>
 			</div>
@@ -31,6 +37,7 @@ body {
 				var regex,
 					i,
 					results = $("#results"),
+					delim = "",
 					count = 0;
 			    loadWordlist();
 			    results.empty();
@@ -42,11 +49,12 @@ body {
 			    }
 			    for (i = 0; i < o.words.length; i += 1) {
 			    	if (regex.exec(o.words[i])) {
-			    		results.append(o.words[i] + "<br/>");
+			    		results.append(delim + o.words[i]);
+			    		delim = ", ";
 			    		count += 1;
 			    	}
 			    }
-			    results.append(count + " words matched");
+			    results.append("<br/><b>" + count + " words matched</b>");
 			});
 
 			function loadWordlist() {
