@@ -115,7 +115,6 @@ body {
 					size: size,
 					screen: true,
 					numbered: false,
-					words: [],
 					across: [],
 					down: [],
 					point: []
@@ -332,11 +331,20 @@ body {
 			};
 
 			function loadWordsLength(z) {
-			    if (!o.words[z]) {
-					$.ajax({ url: "wordlists/words" + z + ".txt", type: "GET", async: false,
+			    if (!o.words) {
+					$.ajax({ url: "../wordlists/2of4brif.txt", type: "GET", async: false,
 						success: function(data_back) {
-//							alert("got back for " + z);
-							o.words[z] = data_back.split("\r\n");
+							var allwords = data_back.split("\r\n"),
+								i,
+								wordlen;
+							o.words = [];
+							for (i = 0; i < allwords.length; i += 1) {
+								wordlen = allwords[i].length;
+								if (!o.words[wordlen]) {
+									o.words[wordlen] = [];
+								}
+								o.words[wordlen].push(allwords[i]);
+							}
 						}
 					});
 			    }
