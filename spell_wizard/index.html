@@ -2,32 +2,62 @@
 <html lang="en">
 	<head>
 		<title>Spell Wizard</title>
-		<script type="text/javascript" src="../external/jquery.core/jquery-1.7.2.min.js"></script>								
+		<link rel="stylesheet" type="text/css" href="../external/bootstrap-2.3.1/css/bootstrap.min.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../external/bootstrap-2.3.1/css/bootstrap-responsive.min.css" />
+	</head>
+	<body>
+		<div class="container-fluid">
+			<h1>Spell Wizard</h1>
+			<table>
+				<tr><td>Test		</td><td id="info_test"		></td></tr>
+				<tr><td>Question	</td><td id="info_question"	></td></tr>
+				<tr><td>Score		</td><td id="info_score"	></td></tr>
+				<tr><td id="info_message"></td></tr>
+			</table>
+			<div class="hero-unit">
+				<div id="main_word"></div>
+				<input id="response" type="text"></input>
+			</div>
+		</div>
+		<script type="text/javascript" src="../external/jquery.core/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="../external/bootstrap-2.3.1/js/bootstrap.min.js"></script>
 		<script>
 			x = {
 				test: 6			// 6-letter words
 			}
 			$(document).ready(function() {
 				loadWordlist();
-				$(":input#response").blur(function() {
-					checkWord($(this).val());
-				});
-				document.onkeyup = function(evt) {
-					var evt = (evt) ? evt : ((event) ? event : null);
-					var node = (evt.target) ? evt.target : ( (evt.srcElement) ? evt.srcElement : null );
-					if (evt.keyCode === 13) {
-						checkWord($(":input#response").val());
-					}
-				}
 			});
 
+			$(document).on("change", ":input#response", function() {
+				checkWord($(this).val());
+				$(this).focus();
+			});
+
+			function loadWordsLength(z) {
+			    if (!x.words) {
+					$.ajax({ url: "../wordlists/2of4brif.txt", type: "GET", async: false,
+						success: function(data_back) {
+							var allwords = data_back.split("\r\n"),
+								i,
+								wordlen;
+							x.words = [];
+							for (i = 0; i < allwords.length; i += 1) {
+								wordlen = allwords[i].length;
+								if (!x.words[wordlen]) {
+									x.words[wordlen] = [];
+								}
+								x.words[wordlen].push(allwords[i]);
+							}
+						}
+					});
+			    }
+				return x.words[z];
+			}
+
 			function loadWordlist() {
-				$.ajax({ url:"wordlists/words" + x.test + ".txt", type: "GET",
-					success: function(data_back) {
-						x.words = data_back.split(/\r\n/);
-						startTest();
-					}
-				});
+				x.words = loadWordsLength(x.test);
+				startTest();
 			}					
 
 			function startTest() {
@@ -51,6 +81,11 @@
 				$("div#main_word").text(x.current_word);
 				$(":input#response").val("");
 				$(":input#response").focus();
+				setTimeout(hideWord, 2000);
+			}
+			
+			function hideWord() {
+				$("div#main_word").text("");
 			}
 			
 			function checkWord(attempt) {
@@ -74,16 +109,5 @@
 				}
 			}
 		</script>
-	</head>
-	<body>
-		<h1>Spell Wizard</h1>
-		<table>
-			<tr><td>Test		</td><td id="info_test"		></td></tr>
-			<tr><td>Question	</td><td id="info_question"	></td></tr>
-			<tr><td>Score		</td><td id="info_score"	></td></tr>
-			<tr><td id="info_message"></td></tr>
-		</table>
-		<div id="main_word"></div>
-		<input id="response"></input>
 	</body>
 </html>
