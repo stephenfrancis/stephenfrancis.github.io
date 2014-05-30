@@ -3,7 +3,7 @@ layout: default
 title: The Social Enterprise
 ---
 The recent problems of the Co-operative Group in the UK appear to pit the principles of the Social Enterprise
-against the demands of western capitalism. The Co-operative's Board appear understandably reluctant to approve
+against the demands of Western capitalism. The Co-operative's Board appear understandably reluctant to approve
 the changes that would see their organisation become like any other for-profit - perhaps thinking of it as a
 betrayal of all the effort and enthusiasm put in over the years by supporters of the Co-operative Movement.
 
@@ -46,7 +46,10 @@ time and labour, and hence receive the additional benefits of acquiring skills a
 But at some point, the discipline of market pricing must be applied to the organisation's inputs as well as the outputs.
 Even free labour must not prevent the organisation from being at least adequately efficient, and will probably,
 through the acquisition of skills and experience, become valuable enough to equate with whatever is available in the
-open labour market. So its reaches the point where it is better for the individual be to paid a full and fair wage than
+open labour market. So it reaches the point where it is better for the individual be to paid a full and fair wage than
 to remain in the donor/beneficiary position, and it's also better for the co-operative to be able to draw on the depth
 and the flexibility of the whole labour force.
 
+Now the co-operative supporter might think this is just a variant of capitalist's "inevitability" argument, that the
+capitalist sneakily re-casts their own position as not a proposal of policy but a description of reality - along the
+lines of: "this is what human behaviour is, things will always go this way eventually, so why fight it?".
