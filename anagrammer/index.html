@@ -37,7 +37,9 @@ body {
 		<script type="text/javascript" src="../external/jquery.core/jquery-1.7.2.min.js"></script>
 		<script type="text/javascript" src="../external/bootstrap-2.3.1/js/bootstrap.min.js"></script>
 		<script>
-			var o = {};
+			var o = {
+				result_limit: 1000
+			};
 
 			$(document).on("change", "#pattern", function(event) {
 				var regex,
@@ -47,7 +49,7 @@ body {
 					delim = "",
 					count = 0;
 			    loadWordlist();
-			    o.root_node.anagrams($(this).val(), results_words);
+			    o.root_node.anagrams($(this).val().toLowerCase().replace(/[^a-z]/, ""), results_words);
 			    results.empty();
 			    for (i = 0; i < results_words.length; i += 1) {
 			    	results.append(delim + results_words[i]);
@@ -57,11 +59,12 @@ body {
 			    results.append("<br/><b>" + count + " words matched</b>");
 			});
 
-			function Node(letter, prev) {
+			function Node(letter, prev, level) {
 				this.letter = letter;
 				this.prev   = prev;
 				this.next   = {};
 				this.count  = 0;
+				this.level  = level || 0;
 				this.ends_word = false;
 			}
 
@@ -71,7 +74,7 @@ body {
 					throw "zero-length string argument of add()";
 				}
 				if (!this.next[initial]) {
-					this.next[initial] = new Node(initial, this);
+					this.next[initial] = new Node(initial, this, this.level + 1);
 					this.count += 1;
 				}
 				if (word.length === 1) {
@@ -105,7 +108,7 @@ body {
 				}
 				throw "should never reach here";
 			}
-			Node.prototype.anagrams = function (string, results, prefix) {
+			Node.prototype.anagrams = function (string, results, prefix, prev_word) {
 				var i,
 					initial;
 				if (typeof prefix !== "string") {
@@ -115,17 +118,27 @@ body {
 					if (this.ends_word) {
 						results.push(prefix + string);
 					}
+				} else if (results.length >= o.result_limit) {
+					return;
 				} else {
 					if (this.ends_word) {
-			    		o.root_node.anagrams(string, results, prefix + " ");
+			    		o.root_node.anagrams(string, results, prefix + " ", prefix.substr(prefix.lastIndexOf(" ") + 1));
+//			    		this.anagrams(string, results, prefix + " ");
 					}
-					for (i = 0; i < string.length; i += 1) {
-						initial = string.substr(i, 1);
-						if (this.next[initial] && string.indexOf(initial) === i) {		// only use 1st occurrence if multiple...
-							console.log(prefix + initial);
-							this.next[initial].anagrams(string.substr(0, i) + string.substr(i+1), results, prefix + initial);
+					for (initial in this.next) {
+						if (this.next.hasOwnProperty(initial) && (i = string.indexOf(initial)) > -1) {
+							if (!prev_word || prev_word.substr(this.level, 1) < initial) {
+								this.next[initial].anagrams(string.substr(0, i) + string.substr(i + 1), results, prefix + initial);
+							}
 						}
 					}
+//					for (i = 0; i < string.length; i += 1) {
+//						initial = string.substr(i, 1);
+//						if (this.next[initial] && string.indexOf(initial) === i) {		// only use 1st occurrence if multiple...
+//							console.log(prefix + initial);
+//							this.next[initial].anagrams(string.substr(0, i) + string.substr(i+1), results, prefix + initial);
+//						}
+//					}
 				}
 			}
 			o.root_node = new Node("");
