@@ -2,6 +2,13 @@
 <html lang="en">
 	<head>
 		<title>Anagrammer</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="description" content="Enter a sequence of letters and see its anagrams from a list of British English words">
+		<meta name="author" content="Stephen Francis">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<link rel="stylesheet" type="text/css" href="../external/bootstrap-2.3.1/css/bootstrap.min.css" media="screen" />
 		<link rel="stylesheet" type="text/css" href="../external/bootstrap-2.3.1/css/bootstrap-responsive.min.css" />
 		<style type="text/css">
@@ -98,21 +105,25 @@ body {
 				}
 				throw "should never reach here";
 			}
-			Node.prototype.anagrams = function (string, results) {
+			Node.prototype.anagrams = function (string, results, prefix) {
 				var i,
 					initial;
+				if (typeof prefix !== "string") {
+					prefix = "";
+				}
 				if (string.length === 0) {
-					throw "zero-length string argument of anagrams()";
-				} else if (string.length === 1) {
-					if (this.next[string] && this.next[string].ends_word) {
-						results.push(this.next[string].getWord());
+					if (this.ends_word) {
+						results.push(prefix + string);
 					}
 				} else {
+					if (this.ends_word) {
+			    		o.root_node.anagrams(string, results, prefix + " ");
+					}
 					for (i = 0; i < string.length; i += 1) {
 						initial = string.substr(i, 1);
 						if (this.next[initial] && string.indexOf(initial) === i) {		// only use 1st occurrence if multiple...
-							console.log(this.next[initial].getWord());
-							this.next[initial].anagrams(string.substr(0, i) + string.substr(i+1), results);
+							console.log(prefix + initial);
+							this.next[initial].anagrams(string.substr(0, i) + string.substr(i+1), results, prefix + initial);
 						}
 					}
 				}
