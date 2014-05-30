@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Anagrammer</title>
+		<link rel="stylesheet" type="text/css" href="../external/bootstrap-2.3.1/css/bootstrap.min.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../external/bootstrap-2.3.1/css/bootstrap-responsive.min.css" />
+		<style type="text/css">
+body {
+	font-family: Arial;
+}
+		</style>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<h1>Anagrammer</h1>
+			<div class="row-fluid">
+				<div class="span6">
+					<p>Enter a sequence of letters and see its anagrams from a list of 
+						<a href="http://wordlist.sourceforge.net/12dicts-readme-r5.html" target="_blank">British English
+						words</a>:
+					</p>
+					<div class="form-inline">
+						<input id="pattern" type="text" class="input-large"></input>
+						<button class="btn" id="go">Go</button>
+					</div>
+					<div id="results"></div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="../external/jquery.core/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="../external/bootstrap-2.3.1/js/bootstrap.min.js"></script>
+		<script>
+			var o = {};
+
+			$(document).on("change", "#pattern", function(event) {
+				var regex,
+					i,
+					results_words = [],
+					results = $("#results"),
+					delim = "",
+					count = 0;
+			    loadWordlist();
+			    o.root_node.anagrams($(this).val(), results_words);
+			    results.empty();
+			    for (i = 0; i < results_words.length; i += 1) {
+			    	results.append(delim + results_words[i]);
+			    	delim = ", ";
+			    	count += 1;
+			    }
+			    results.append("<br/><b>" + count + " words matched</b>");
+			});
+
+			function Node(letter, prev) {
+				this.letter = letter;
+				this.prev   = prev;
+				this.next   = {};
+				this.count  = 0;
+				this.ends_word = false;
+			}
+
+			Node.prototype.add = function (word) {
+				var initial = word.substr(0, 1);
+				if (word.length < 1) {
+					throw "zero-length string argument of add()";
+				}
+				if (!this.next[initial]) {
+					this.next[initial] = new Node(initial, this);
+					this.count += 1;
+				}
+				if (word.length === 1) {
+					this.next[initial].ends_word = true;
+				} else {
+					this.next[initial].add(word.substr(1));
+				}
+			}
+			Node.prototype.getWord = function (suffix) {
+				if (typeof suffix !== "string") {
+					suffix = "";
+				}
+				suffix = this.letter + suffix;
+				if (this.prev) {
+					suffix = this.prev.getWord(suffix);
+				}
+				return suffix;
+			}
+			Node.prototype.getRandom = function () {
+				var rand = Math.floor(Math.random() * (this.count + (this.ends_word ? 1 : 0)));
+				if (this.ends_word && rand === this.count) {
+					return this.getWord();
+				}
+				for (letter in this.next) {
+					if (this.next.hasOwnProperty(letter)) {
+						if (rand === 0) {
+							return this.next[letter].getRandom();
+						}
+						rand -= 1;
+					}
+				}
+				throw "should never reach here";
+			}
+			Node.prototype.anagrams = function (string, results) {
+				var i,
+					initial;
+				if (string.length === 0) {
+					throw "zero-length string argument of anagrams()";
+				} else if (string.length === 1) {
+					if (this.next[string] && this.next[string].ends_word) {
+						results.push(this.next[string].getWord());
+					}
+				} else {
+					for (i = 0; i < string.length; i += 1) {
+						initial = string.substr(i, 1);
+						if (this.next[initial] && string.indexOf(initial) === i) {		// only use 1st occurrence if multiple...
+							console.log(this.next[initial].getWord());
+							this.next[initial].anagrams(string.substr(0, i) + string.substr(i+1), results);
+						}
+					}
+				}
+			}
+			o.root_node = new Node("");
+			
+			function loadWordlist() {
+			    if (!o.words_added) {
+					$.ajax({ url: "../wordlists/2of4brif.txt", type: "GET", async: false,
+						success: function(data_back) {
+							var allwords = data_back.split("\r\n"),
+								i;
+							for (i = 0; i < allwords.length; i += 1) {
+								if (allwords[i].length > 0) {
+									o.root_node.add(allwords[i]);
+								}
+							}
+							o.words_added = true;
+							for (i = 0; i < 10; i += 1) {
+								console.log(o.root_node.getRandom());
+							}
+						}
+					});
+			    }
+			}
+
+
+		</script>
+	</body>
+</html>
