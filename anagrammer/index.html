@@ -27,7 +27,12 @@ body {
 						words</a>:
 					</p>
 					<div class="form-inline">
-						<input id="pattern" type="text" class="input-large"></input>
+						Pattern:
+						<input id="pattern"      type="text" class="input-medium" placeholder="letters"></input>
+						Max Words:
+						<input id="max_words"    type="text" class="input-mini"   placeholder="max words"    value="2"   ></input>
+						Max Results:
+						<input id="result_limit" type="text" class="input-mini"   placeholder="result limit" value="1000"></input>
 						<button class="btn" id="go">Go</button>
 					</div>
 					<div id="results"></div>
@@ -38,18 +43,24 @@ body {
 		<script type="text/javascript" src="../external/bootstrap-2.3.1/js/bootstrap.min.js"></script>
 		<script>
 			var o = {
+				max_words: 20,
 				result_limit: 1000
 			};
 
-			$(document).on("change", "#pattern", function(event) {
+			$(document).on("change", null, function(event) {
 				var regex,
 					i,
+					pattern,
 					results_words = [],
 					results = $("#results"),
 					delim = "",
 					count = 0;
+
 			    loadWordlist();
-			    o.root_node.anagrams($(this).val().toLowerCase().replace(/[^a-z]/, ""), results_words);
+			    pattern = $("#pattern").val().toLowerCase().replace(/[^a-z]/, "");
+			    o.max_words    = parseInt($("#max_words"   ).val(), 10) || 1000;
+			    o.result_limit = parseInt($("#result_limit").val(), 10) ||   20;
+			    o.root_node.anagrams(pattern, results_words);
 			    results.empty();
 			    for (i = 0; i < results_words.length; i += 1) {
 			    	results.append(delim + results_words[i]);
@@ -118,7 +129,7 @@ body {
 					if (this.ends_word) {
 						results.push(prefix + string);
 					}
-				} else if (results.length >= o.result_limit) {
+				} else if (results.length >= o.result_limit || prefix.split(" ").length > o.max_words) {
 					return;
 				} else {
 					if (this.ends_word) {
