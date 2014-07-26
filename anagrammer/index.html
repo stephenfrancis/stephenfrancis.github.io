@@ -48,6 +48,13 @@ body {
 			};
 
 			$(document).on("change", null, function(event) {
+				var results = $("#results");
+			    results.empty();
+			    results.append("<br/><b>working...</b>");
+			    setTimeout(run, 50);
+			});
+
+			function run() {
 				var regex,
 					i,
 					pattern,
@@ -56,12 +63,6 @@ body {
 					delim = "",
 					count = 0;
 
-			    results.empty();
-			    results.append("<br/><b>working...</b>");
-			    setTimeout(run, 50);
-			});
-
-			function run() {
 			    loadWordlist();
 			    pattern = $("#pattern").val().toLowerCase().replace(/[^a-z]/, "");
 			    o.max_words    = parseInt($("#max_words"   ).val(), 10) || 1000;
