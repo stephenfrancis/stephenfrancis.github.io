@@ -1,22 +1,22 @@
 /*global  */
 "use strict";
 
-if (typeof String.prototype.repeat !== "function") {
-	String.prototype.repeat = function (num) {
-	    return new Array(num + 1).join(this);
-	};
-}
 
-if (typeof String.prototype.trim !== "function") {
-	String.prototype.trim = function () {
-	    return this.replace(/(^\s*)|(\s*$)/g, "");
-	};
-}
-
-Object.prototype.clone = function () {
+Object.prototype.clone = function (spec) {
 	var out = {};
-	out.__proto__ = this;
+    obj = Object.create(this);
+    obj.parent = this;
+    if (spec) {
+        obj.addFrom(spec);
+    }
 	return out;
+};
+
+Object.prototype.addFrom = function (spec) {
+    var that = this;
+    spec.forOwn(function(key, val) {
+        that[key] = val;
+    });
 };
 
 Object.prototype.forAll = function (funct) {
@@ -43,43 +43,116 @@ Object.prototype.forOwn = function (funct) {
 	}
 };
 
-Object.prototype.view = function (funct, limit) {
-	var out   = "{",
-		delim = " ";
 
-	funct = funct || "forOwn";
-	limit = limit || 100;
-	this[funct](function (key, value) {
-	    if (out.length > limit) {
-	        return;
-	    }
-		out  += delim + key + ": " + value.view(funct, limit);
-		delim = ", ";
-	});
-    if (out.length > limit) {
-        out += " ...";
-    }
-    if (out.length > 1) {
-        out += " ";
-    }
-	return out + "}"; 
+
+String.prototype.repeat = function (num) {
+    return new Array(num + 1).join(this);
 };
 
-String.prototype.view = function () {
-    return "\"" + this.toString() + "\"";
+String.prototype.trim = function () {
+    return this.replace(/(^\s*)|(\s*$)/g, "");
 };
 
-Number.prototype.view = function () {
+String.prototype.leftJustify = function (total_width) {
+    total_width = total_width || 10;
+    return this.toString() + (" ").repeat(Math.max(total_width - this.length, 0));
+};
+
+String.prototype.rightJustify = function (total_width) {
+    total_width = total_width || 10;
+    return (" ").repeat(Math.max(total_width - this.length, 0)) + this.toString();
+};
+
+
+
+Number.prototype.round = function (decimal_digits) {
+    decimal_digits = decimal_digits || 0;
+    return parseFloat(this.toFixed(decimal_digits), 10);
+};
+
+Number.prototype.leftJustify = function (total_width, decimal_digits) {
+    var str;
+    if (typeof decimal_digits === "number") {
+        str = this.toFixed(decimal_digits);
+    } else {
+        str = String(this);
+    }
+    return str.leftJustify(total_width);
+};
+
+Number.prototype.rightJustify = function (total_width, decimal_digits) {
+    var str;
+    if (typeof decimal_digits === "number") {
+        str = this.toFixed(decimal_digits);
+    } else {
+        str = String(this);
+    }
+    return str.rightJustify(total_width);
+};
+
+Number.isStrictNumber = function (str) {
+    return str.match(/^-?[0-9]*$|^-?[0-9]*\.[0-9]*$/);
+};
+
+
+
+Array.prototype.copy = function () {
+    var new_arr = [],
+        i;
+    for (i = 0; i < this.length; i += 1) {
+        new_arr[i] = this[i];
+    }
+    return new_arr;
+};
+
+
+// view()
+
+Object.prototype.view = function (depth, incl_inherits) {
+    var out   = "{ ",
+        delim = "";
+
+    depth = depth || 0;
+    if (depth > -1) {
+        this[incl_inherits ? "forAll" : "forOwn"](function (prop_id, prop_val) {
+            out += delim + prop_id + ": " + Object.viewProp(prop_val, depth, incl_inherits);
+            delim = ", ";
+        });
+        return out + " }";
+    }
+    return "{...}";
+};
+
+Object.viewProp = function (prop_val, depth, incl_inherits) {
+    return (typeof prop_val === "undefined" ? "undefined" : (typeof prop_val === "null" ? "null" : prop_val.view(depth - 1, incl_inherits)));
+};
+
+Array.prototype.view = function (depth, incl_inherits) {
+    var out = "[ ",
+        count = 0;
+
+    depth = depth || 0;
+    if (depth > -1) {
+        for (count = 0; count < this.length; count += 1) {
+            out += (count === 0 ? "" : ", ") + Object.viewProp(this[count], depth, incl_inherits);
+        }
+        return out + " ]";
+    }
+    return "[...]";
+};
+
+Boolean.prototype.view = function (depth) {
     return this.toString();
 };
 
-Array.prototype.view = function () {
-    return "[" + this.toString() + "]";
+Number.prototype.view = function (depth) {
+    return this.toString();
 };
 
-Object.prototype.toString = function () {
-    return this.view();
+String.prototype.view = function (depth) {
+    return "\"" + this.toString() + "\"";
 };
+
 
 
 // sanity check method - ensures key doesn't already exist anywhere in prototype chain 
@@ -97,3 +170,6 @@ Object.prototype.override = function (key, value) {
     }
     this[key] = value;
 };
+
+
+
