@@ -44,21 +44,28 @@ It seems to me that most people will easily be able to think of numerous counter
  analytical response is deeper, and involve the idea of humans as non-rational, or not-always-rational, actors.
 
 I was wrong – there is another mistake – that a worker’s productivity is constant, or at least, varies only slightly, in a
- limited and predictable way. My chief argument for a greater focus on the long term relies on a better understanding of
+ limited and predictable way. My chief argument for a greater focus on the long-term relies on a better understanding of
   worker productivity. 
 
 To be written up better…
 
 - in Smith’s “pin factory” example, worker productivity is multiplied by 1000s, so clear it can vary a lot!
 - in that example, the tasks are very simple – in fact they get simpler, and it is easy for us to see what is going on
-- the economy (in the West anyway) has changed, and people’s jobs are more complicated – the Knowledge economy
-- obviously true for lawyers and investment bankers, but equally true in manufacturing – the repetitive jobs are easy to automate and have been
-- companies gain huge productivity boosts from well-organised quality-management systems that enable all workers to contribute to continual improvement
-- good training and worker motivation (worker productivity) have a massive impact of overall company productivity and hence profitability
-- companies with a passion to deliver the best products and services invest more in research and development, motivate their workers better, and hence become more profitable
-- change, even innovation, can be very detrimental, disrupting processes, requiring workers to learn to use new skills, tool and techniques
+- the economy (in the West anyway) has changed, and people’s jobs are more complicated – the "Knowledge Economy"
+- obviously true for lawyers and investment bankers, but equally true in manufacturing – the repetitive jobs are easy to automate
+	 and have been
+- companies gain huge productivity boosts from well-organised quality-management systems that enable all workers to contribute to
+	 continual improvement
+- good training and worker motivation (worker productivity) have a massive impact of overall company productivity and hence
+	 profitability
+- companies with a passion to deliver the best products and services invest more in research and development, motivate their
+	 workers better, and hence become more profitable
+- change, even innovation, can be very detrimental, disrupting processes, requiring workers to learn to use new skills, tool and
+	 techniques
 - hence innovation has a cost, that needs to be repaid through a sustained period of increased productivity
 - frequent disruptive innovation can prevent that repayment from ever being fully made
-- anyway, we need to change our image of “innovation” – it is mostly the small, unnoticed, “inside the industry” improvements in products and production techniques that improve quality, reliability, convenience and reduce cost, it is not usually the “Dragon’s Den” ideas for entirely new products that often come from outside the industry
+- anyway, we need to change our image of “innovation” – it is mostly the small, unnoticed, “inside the industry” improvements in
+	 products and production techniques that improve quality, reliability, convenience and reduce cost, it is not usually the
+	  “Dragon’s Den” ideas for entirely new products that often come from outside the industry
 
 
