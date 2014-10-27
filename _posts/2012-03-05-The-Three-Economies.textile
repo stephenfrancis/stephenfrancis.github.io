@@ -36,16 +36,16 @@ world today – even above the level of re-distribution of wealth.
 
 A summary comparison of some of the characteristics of the three economies:
 
-|						|Market							|Tax							|Moneyless
-|What?					|quantified goods and services	|somewhat quantified services	|wants and needs sometimes characterised as services
-|Usual Examples?		|retail, finance, leisure and entertainment, transport, housing	|justice, policing, education, healthcare, defence, social services	|volunteering, community action, neighbourliness, living/being in the wild, open-source, home-schooling
-|Payment?				|direct by the beneficiary		|indirect, by government of other responsible authority		|none
-|Value?					|market price					|perceived, or measured outcomes|personal judgment
-|Provider?				|companies, traders				|government agencies, contracted companies	|individuals, the natural world
-|Selection?				|market choice					|government decision			|personal choice
-|Provider Motivation?	|profit							|re-distribution, social / national benefit, occasionally profit	|senses of duty, social responsibility, self-expression, etc
-|Employee Motivation?	|money, ambition				|social responsibility, vocation|"
-|Appearance in GDP?		|valued at market prices		|valued at cost					|not included
+|						|Market							|Tax							|Moneyless	|
+|What?					|quantified goods and services	|somewhat quantified services	|wants and needs sometimes characterised as services	|
+|Usual Examples?		|retail, finance, leisure and entertainment, transport, housing	|justice, policing, education, healthcare, defence, social services	|volunteering, community action, neighbourliness, living/being in the wild, open-source, home-schooling	|
+|Payment?				|direct by the beneficiary		|indirect, by government of other responsible authority		|none	|
+|Value?					|market price					|perceived, or measured outcomes|personal judgment	|
+|Provider?				|companies, traders				|government agencies, contracted companies	|individuals, the natural world	|
+|Selection?				|market choice					|government decision			|personal choice	|
+|Provider Motivation?	|profit							|re-distribution, social / national benefit, occasionally profit	|senses of duty, social responsibility, self-expression, etc	|
+|Employee Motivation?	|money, ambition				|social responsibility, vocation|"	|
+|Appearance in GDP?		|valued at market prices		|valued at cost					|not included	|
 
 
 It might be thought that the market economy is simply the private sector, the tax economy is the public
