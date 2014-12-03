@@ -4,10 +4,10 @@
 
 Object.prototype.clone = function (spec) {
 	var out = {};
-    obj = Object.create(this);
-    obj.parent = this;
+    out = Object.create(this);
+    out.parent = this;
     if (spec) {
-        obj.addFrom(spec);
+        out.addFrom(spec);
     }
 	return out;
 };
@@ -124,7 +124,7 @@ Object.prototype.view = function (depth, incl_inherits) {
 };
 
 Object.viewProp = function (prop_val, depth, incl_inherits) {
-    return (typeof prop_val === "undefined" ? "undefined" : (typeof prop_val === "null" ? "null" : prop_val.view(depth - 1, incl_inherits)));
+    return (typeof prop_val === "undefined" ? "undefined" : (prop_val === null ? "null" : prop_val.view(depth - 1, incl_inherits)));
 };
 
 Array.prototype.view = function (depth, incl_inherits) {
