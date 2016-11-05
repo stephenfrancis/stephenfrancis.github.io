@@ -1,0 +1,16 @@
+---
+layout: default
+title: Brexit
+---
+
+Last Thursday, the UK voted to leave the EU, by 52% to 48%, in a referendum.
+
+Since the result was known, early Friday morning, the country's political system appears engulfed with chaos, the markets have been rocked, and I think there is a rapidly developing sense of uncertainty across the country.
+
+How should we understand this, and what can we learn from it?
+
+The answers are to be found in a set of interlocking themes:
+* The Nature of Democracy
+* The failures of the Remain Campaign
+* The Problems with the EU
+* The Weakness of British Identity

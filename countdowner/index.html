@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Countdowner</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="description" content="Enter a sequence of letters and see its anagrams from a list of British English words">
+		<meta name="author" content="Stephen Francis">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="../external/bootstrap-2.3.1/css/bootstrap.min.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../external/bootstrap-2.3.1/css/bootstrap-responsive.min.css" />
+		<style type="text/css">
+body {
+	font-family: Arial;
+}
+		</style>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<h1>Countdowner</h1>
+			<div class="row-fluid">
+				<div class="span6">
+					<p>Enter a sequence of letters and see the largest words that can be made from them, from a list of
+						<a href="http://wordlist.sourceforge.net/12dicts-readme-r5.html" target="_blank">British English
+						words</a>:
+					</p>
+					<div class="form-inline">
+						Pattern:
+						<input id="pattern"      type="text" class="input-medium" placeholder="letters"></input>
+						<button class="btn" id="go">Go</button>
+					</div>
+					<div id="results"></div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="../external/jquery.core/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="../external/bootstrap-2.3.1/js/bootstrap.min.js"></script>
+		<script>
+			var o = {
+				// max_words: 20,
+				// result_limit: 1000
+			};
+
+			$(document).on("change", null, function(event) {
+				var results = $("#results");
+			    results.empty();
+			    results.append("<br/><b>working...</b>");
+			    setTimeout(run, 50);
+			});
+
+			function run() {
+				var regex,
+					i,
+					pattern,
+					results_words = [],
+					results = $("#results"),
+					delim = "",
+					count = 0;
+
+			    loadWordlist();
+			    pattern = $("#pattern").val().toLowerCase().replace(/[^a-z]/, "");
+			    o.max_words    = parseInt($("#max_words"   ).val(), 10) || 1000;
+			    o.result_limit = parseInt($("#result_limit").val(), 10) ||   20;
+			    o.curr_longest = 0;
+			    o.root_node.anagrams(pattern, results_words);
+			    results.empty();
+			    for (i = 0; i < results_words.length; i += 1) {
+			    	results.append(delim + results_words[i]);
+			    	delim = ", ";
+			    	count += 1;
+			    }
+			    results.append("<br/><b>" + count + " words matched</b>");
+			}
+
+			function Node(letter, prev, level) {
+				this.letter = letter;
+				this.prev   = prev;
+				this.next   = {};
+				this.count  = 0;
+				this.level  = level || 0;
+				this.ends_word = false;
+			}
+
+			Node.prototype.add = function (word) {
+				var initial = word.substr(0, 1);
+				if (word.length < 1) {
+					throw "zero-length string argument of add()";
+				}
+				if (!this.next[initial]) {
+					this.next[initial] = new Node(initial, this, this.level + 1);
+					this.count += 1;
+				}
+				if (word.length === 1) {
+					this.next[initial].ends_word = true;
+				} else {
+					this.next[initial].add(word.substr(1));
+				}
+			}
+			Node.prototype.getWord = function (suffix) {
+				if (typeof suffix !== "string") {
+					suffix = "";
+				}
+				suffix = this.letter + suffix;
+				if (this.prev) {
+					suffix = this.prev.getWord(suffix);
+				}
+				return suffix;
+			}
+			Node.prototype.getRandom = function () {
+				var rand = Math.floor(Math.random() * (this.count + (this.ends_word ? 1 : 0)));
+				if (this.ends_word && rand === this.count) {
+					return this.getWord();
+				}
+				for (letter in this.next) {
+					if (this.next.hasOwnProperty(letter)) {
+						if (rand === 0) {
+							return this.next[letter].getRandom();
+						}
+						rand -= 1;
+					}
+				}
+				throw "should never reach here";
+			}
+			Node.prototype.anagrams = function (string, results, prefix, prev_word) {
+				var i,
+					initial;
+
+				if (typeof prefix !== "string") {
+					prefix = "";
+				}
+/*
+				if (string.length === 0) {
+					if (prefix.length >= o.curr_longest) {
+						results.push(prefix);
+						o.curr_longest = prefix.length;
+					}
+				// } else if (results.length >= o.result_limit || prefix.split(" ").length > o.max_words) {
+				// 	return;
+				} else {
+*/
+					if (this.ends_word) {
+						if (prefix.length >= o.curr_longest) {
+							results.push(prefix);
+							o.curr_longest = prefix.length;
+						}
+			    		// o.root_node.anagrams(string, results, prefix + " ", prefix.substr(prefix.lastIndexOf(" ") + 1));
+//			    		this.anagrams(string, results, prefix + " ");
+					}
+					for (initial in this.next) {
+						if (this.next.hasOwnProperty(initial) && (i = string.indexOf(initial)) > -1) {
+							// if (!prev_word || prev_word.substr(this.level, 1) < initial) {
+								this.next[initial].anagrams(string.substr(0, i) + string.substr(i + 1), results, prefix + initial);
+							// }
+						}
+					}
+//					for (i = 0; i < string.length; i += 1) {
+//						initial = string.substr(i, 1);
+//						if (this.next[initial] && string.indexOf(initial) === i) {		// only use 1st occurrence if multiple...
+//							console.log(prefix + initial);
+//							this.next[initial].anagrams(string.substr(0, i) + string.substr(i+1), results, prefix + initial);
+//						}
+//					}
+				}
+			// }
+			o.root_node = new Node("");
+
+			function loadWordlist() {
+			    if (!o.words_added) {
+					$.ajax({ url: "../wordlists/2of4brif.txt", type: "GET", async: false,
+						success: function(data_back) {
+							var allwords = data_back.split("\r\n"),
+								i;
+							for (i = 0; i < allwords.length; i += 1) {
+								if (allwords[i].length > 0) {
+									o.root_node.add(allwords[i]);
+								}
+							}
+							o.words_added = true;
+							for (i = 0; i < 10; i += 1) {
+								console.log(o.root_node.getRandom());
+							}
+						}
+					});
+			    }
+			}
+
+
+		</script>
+	</body>
+</html>
