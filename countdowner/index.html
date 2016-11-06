@@ -29,6 +29,8 @@ body {
 					<div class="form-inline">
 						Pattern:
 						<input id="pattern"      type="text" class="input-medium" placeholder="letters"></input>
+						<button class="btn" id="consonant">Consonant</button>
+						<button class="btn" id="vowel">Vowel</button>
 						<button class="btn" id="go">Go</button>
 					</div>
 					<div id="results"></div>
@@ -44,11 +46,36 @@ body {
 			};
 
 			$(document).on("change", null, function(event) {
+				runUI();
+			});
+
+			$(document).on("click", "#go", function(event) {
+				runUI();
+			});
+
+			$(document).on("click", "#consonant", function(event) {
+				addLetter(getRandomLetter("bcdfghjklmnpqrstvwxyz"));
+			});
+
+			$(document).on("click", "#vowel", function(event) {
+				addLetter(getRandomLetter("aeiou"));
+			});
+
+			function getRandomLetter(range) {
+				var rand = Math.floor(Math.random() * range.length);
+				return range.substr(rand, 1);
+			}
+
+			function addLetter(letter) {
+				$("#pattern").val($("#pattern").val() + letter);
+			}
+
+			function runUI() {
 				var results = $("#results");
 			    results.empty();
 			    results.append("<br/><b>working...</b>");
 			    setTimeout(run, 50);
-			});
+			}
 
 			function run() {
 				var regex,
