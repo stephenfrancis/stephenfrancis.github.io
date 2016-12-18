@@ -54,11 +54,13 @@ body {
 			});
 
 			$(document).on("click", "#consonant", function(event) {
-				addLetter(getRandomLetter("bcdfghjklmnpqrstvwxyz"));
+				// addLetter(getRandomLetter("bcdfghjklmnpqrstvwxyz"));
+				addLetter(getRandomLetter("bcddfgghhjkllmmnnppqrrrssstttvwxyz"));			// weighted
 			});
 
 			$(document).on("click", "#vowel", function(event) {
-				addLetter(getRandomLetter("aeiou"));
+				// addLetter(getRandomLetter("aeiou"));
+				addLetter(getRandomLetter("aaeeeioou"));				// weighted
 			});
 
 			function getRandomLetter(range) {
