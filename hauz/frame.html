@@ -172,17 +172,17 @@
         </div>
 
         <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.4/jquery.URI.min.js"></script>
         <script type="text/javascript">
 
 $(document).ready(function () {
 
 	function hashchange() {
-	    var fragment = $.fn.uri(window.location.href).fragment();
+	    var fragment = window.location.hash;
 	    // alert("fragment: " + fragment);
 	    if (!fragment) {
 	    	return;
 	    }
+        fragment = fragment.substr(1);
 	    $.ajax({
 	        url: fragment,
 	        type: "GET",
