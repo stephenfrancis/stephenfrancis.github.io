@@ -1,0 +1,93 @@
+
+
+Onboarding
+
+
+
+Screen 1
+
+Welcome to PropertyPurchaseApp! I can help you **track your property purchase** and
+**provide guidance** throughout the process.
+
+Let's get started!
+
+Which of the following have you done so far?
+
+o Selected your target locatiom and started viewing properties
+
+o Got an "offer-in-principle" from a mortgage company
+
+o Had a verbal offer accepted by the seller
+
+o engaged a solicitor
+
+o had your mortgage agreed
+
+o exchanged contracts
+
+o moved in
+
+
+[state key benefits up-front, and dive straight in with a relevant question that
+will establish context and help the user to begin thinking about the main stages
+of the process; each o the above options has 'hover texr' to explain in more detail]
+
+
+Screen 2
+
+[initial text is a response to previous question]
+
+e.g. if none ticked, "well, it's a bit early to start using me yet, but come back when
+you've started looking at properties!"
+
+if "moved in" ticked, "well, it's a bit late for me, but I hope you love your new home!"
+
+if out-of-order options, something like "well, I think you need to get an
+"offer-in-principle" from a mortgage company, unlsss you have the full price available as
+cash (lucky you!) - let me help you!"
+
+if neither mortgaged agreed nor offer-in-principle, then "I'll suggest some great mortgage
+offers in a moment"
+
+if not engaged a solicitor, then "I'll suggest some great solicitors in a moment"
+
+What type of property?
+
+- freehold
+- leasehold
+- other
+- not sure
+
+[capture the most significant detail in terms of predicting offer-to-completion time,
+as ewll as being an important fact for later]
+
+
+Screen 3
+
+Did you know that the average time from offer being accepted to moving in for a freehold/
+leasehold property in the UK is NN weeks?
+
+I'll let you know when to expect things to be done by, throughout the process, so you
+can have peace of mind that everything is on track!
+
+Just give me your email address, a password, and the postcode of the property you're
+looking to buy (if you know it) and I'll be with you every step of the way!
+
+Email: _______________________________________
+
+Password: ____________________
+
+Psotcode: ____________
+
+[the postcode is requested to (a) personalize the home screen and (b) provide some
+location-specific stats and information - it is NOT required]
+
+[password is only asked once - it can be reset using a "forgotten password" link
+on the log-in page]
+
+
+
+
+
+
+

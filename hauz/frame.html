@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Hauz</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="author" content="Stephen Francis">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Baloo+Thambi|Work+Sans">
+		<link rel="stylesheet" type="text/css" href="/cdn/twitter-bootstrap-v2.3.2/css/bootstrap.icon-large.min.css" />
+
+        <style>
+        	body {
+        		margin: 0;
+/*        		font-family: Arial;*/
+                background-color: #fdfdfd;
+				font-family: 'Work Sans', sans-serif;
+				color: #101010;
+				line-height: 1.5;
+        	}
+            h1, h2 {
+                font-family: 'Baloo Thambi', cursive;
+                font-size: 24px;
+            }
+            h1 {
+                margin-top: 30px;
+            }
+            a {
+            	text-decoration: none;
+            	color: #101010;
+            }
+            img {
+                vertical-align: middle;
+            }
+            a.button {
+                display: inline-block;
+                background-color: #ddd;
+                color: #222;
+                border-radius: 15px 5px 15px 5px;
+                border: 1px solid #dddddd;
+                padding: 10px;
+            }
+            i.icon-large {
+            	vertical-align: middle;
+            }
+            .device_top_strip {
+            	position: fixed; top: 0; left: 0;
+            	width: 100%;
+                background-color: #080808;
+                color: #f0f0f0;
+                min-height: 23px;
+                z-index: 10;
+            }
+            .device_top_strip img {
+            	height: 16px; width: 16px;
+            }
+            .app_title_strip {
+            	position: fixed; top: 23px; left: 0;
+            	width: 100%;
+                background-color: #f0f0f0;
+                min-height: 50px;
+                font-size: 38px;
+                font-weight: bold;
+                text-align: left;
+                padding-left: 20px;
+                font-family: 'Baloo Thambi', cursive;
+                border-bottom: 1px solid #e8e8e8;
+                z-index: 10;
+            }
+            .app_menu_strip {
+            	position: fixed; top: 60px; left: 0;
+            	width: 100%;
+                background-color: green;
+                min-height: 20px;
+            }
+            .app_dynamic {
+/*                background-color: orange;*/
+                min-height: 60px;
+                margin-top: 60px;
+                margin-bottom: 80px;
+                padding: 20px;
+                border-bottom: 1px solid #f0f0f0;
+            }
+            .app_foot_strip {
+            	position: fixed; bottom: 0; left: 0;
+            	width: 100%;
+                text-align: right;
+                background-color: #f0f0f0;
+                border-top: 1px solid #e8e8e8;
+                min-height: 20px;
+                font-size: 12px;
+            	padding: 3px;
+            }
+            .app_foot_strip a {
+            	display: inline-block;
+            	position: relative;
+            	background-color: #ddd;
+            	color: #222;
+            	border-radius: 15px 5px 15px 5px;
+            	border: 1px solid #dddddd;
+            	padding: 2px 10px;
+            	right: 10px;
+            }
+            .bottom_buttons_left, .bottom_buttons_right {
+            }
+            .bottom_buttons_left a, .bottom_buttons_right a {
+            	display: block;
+            	background-color: #ddd;
+            	color: #222;
+            	width: auto;
+            	border-radius: 15px 5px 15px 5px;
+            	border: 1px solid #dddddd;
+            	padding: 10px;
+            }
+            .bottom_buttons_left a {
+            	float: left;
+            	border-radius: 5px 15px 5px 15px;
+                margin-right: 10px;
+            }
+            .bottom_buttons_right a {
+            	float: right;
+            	border-radius: 15px 5px 15px 5px;
+                margin-left: 10px;
+            }
+            .bottom_buttons_left a:hover, .bottom_buttons_left a:active,
+            .bottom_buttons_right a:hover, .bottom_buttons_right a:active {
+            	background-color: #d8d8d8;
+            }
+            .full_width_buttons {
+                padding-top: 20px;
+                padding-right: 20px;
+                padding-bottom: 20px;
+            }
+            .full_width_buttons a {
+                width: 100%;
+                margin-bottom: 30px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="device_top_strip">
+        	<span style="">EE</span>
+        	<span style="float: right" id="device_time">
+        		14:32
+        	</span>
+        	<span style="float: right">
+        		<img src="wifi_signal_4_of_4.png" />
+        		<img src="network_signal_5_of_5.png" />
+        		<img src="battery_full.png" />
+        </div>
+        <div class="app_title_strip">
+        	<a href="#16_home.html">
+        <!--
+        	<i class="icon-large icon-home" style="position: relative; left: -5px; top: -3px; color: blue"> </i>hauz
+        -->
+        	<img src="Door_Opened-50.png" /> hauz
+        	</a>
+        </div>
+<!--
+        <div class="app_menu_strip">
+        	Boggle
+        </div>
+-->
+        <div class="app_dynamic">
+        	Loading...
+        </div>
+        <div class="app_foot_strip">
+        	<a href="#more_about.html">more about hauz</a>
+        </div>
+
+        <script type="text/javascript" src="/cdn/jquery-v1.11.3/jquery-1.11.3.min.js"> </script>
+        <script type="text/javascript" src="/cdn/medialize/URI.js"> </script>
+        <script type="text/javascript">
+
+$(document).ready(function () {
+
+	function hashchange() {
+	    var fragment = URI(window.location.href).fragment();
+	    // alert("fragment: " + fragment);
+	    if (!fragment) {
+	    	return;
+	    }
+	    $.ajax({
+	        url: fragment,
+	        type: "GET",
+	        cache: false,
+	        success: function (content) {
+	        	$(".app_dynamic")
+	        		.empty()
+	        		.append(content);
+	        },
+	        error: function (xml_http_request, text_status) {
+	            console.log("[" + xml_http_request.status + "] " + xml_http_request.statusText + " " + text_status);
+	        	$(".app_dynamic")
+	        		.empty()
+	        		.append("error");
+	        },
+	    });
+	}
+
+	function pad(num) {
+		var out = String(num);
+		if (out.length < 2) {
+			out = "0" + out;
+		}
+		return out;
+	}
+	function updateDate () {
+	    var date = new Date();
+	    $("#device_time").text(pad(date.getHours()) + ":" + pad(date.getMinutes()));
+	    setTimeout(updateDate, 5000);
+	};
+
+	window.onhashchange = function () {
+	    hashchange();
+	};
+
+	updateDate();
+    hashchange();
+});
+
+        </script>
+    </body>
+</html>
