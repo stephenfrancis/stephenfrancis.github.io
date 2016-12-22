@@ -8,7 +8,10 @@
         <meta name="author" content="Stephen Francis">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Baloo+Thambi|Work+Sans">
+<!--
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.css" />
+-->
+        <link rel="stylesheet" href="../external/bootstrap-2.3.1/css/bootstrap-responsive.css" />
 
         <style>
         	body {
@@ -43,6 +46,20 @@
             }
             i.icon-large {
             	vertical-align: middle;
+            }
+            input[type='checkbox'] {
+                display: inline-block;
+                margin: 5px;
+                vertical-align: top;
+            }
+            label {
+                display: inline-block;
+                width: 90%;
+            }
+            .low-key {
+                color: #444;
+                font-size: 11px;
+                display: inline-block;
             }
             .device_top_strip {
             	position: fixed; top: 0; left: 0;
@@ -188,6 +205,20 @@
                 border-bottom-left-radius: 20px;
                 overflow: hidden;
             }
+            .large-checkbox {
+                float: right;
+                background: #ccc;
+                -moz-border-radius: 10px;
+                border-radius: 10px;
+                border: 1px solid #bbb;
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                font-size: 30px;
+                font-weight: bold;
+                color: purple;
+                line-height: 0.5;
+            }
         </style>
     </head>
     <body>
@@ -222,8 +253,10 @@
         <div class="app_foot_strip">
         	<a href="#more_about.html">more about hauz</a>
         </div>
-
+<!--
         <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+-->
+        <script src="../external/jquery.core/jquery-1.11.0.min.js"></script>
         <script type="text/javascript">
 
 $(document).ready(function () {

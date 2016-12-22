@@ -3,17 +3,50 @@
 
 	<h1>Actions</h1>
 
-	<a class="button" href="#16_action_01.html">You need to <b>choose a survey level</b></a>
+	<a class="button" href="#16_action_01.html">
+		You need to <b>choose a survey level</b>
+		<span class="low-key">tap to perform this action</span>
+	</a>
 
 
 
 	<h1>Overall Progress</h1>
 
-	<a class="button" href="#16_progress_summary.html" style="position: relative;">
+	<a class="button" href="#16_progress_summary.html" style="position: relative; vertical-align: top;">
+		<div style="display: inline-block; width: 50%;">
+			Percentage of all expected activities completed so far
+			<span class="low-key">tap to see more detail</span>
+		</div>
+		<div style="display: inline-block; width: 40%; float: right;">
+			<svg width="120" height="120">
+				<path d="M 55,5 A 50,50 0 1 1 55,115" fill="transparent" stroke="purple" stroke-width="10px" />
+<!--
+				<path d="M 55,5 A 55,55 0 1 1 5,55" fill="transparent" stroke="purple" stroke-width="10px" />
+-->
+			</svg>
+			<div style="position: absolute; top: 48px; right: 40px; font-size: 30px; font-weight: bold;">50%</div>
+		</div>
+<!--
+		<div class="bar_container">
+			<div id="main_container">
+				<div id="pbar" class="progress-pie-chart" data-percent="0">
+					<div class="ppc-progress">
+						<div class="ppc-progress-fill"></div>
+					</div>
+					<div class="ppc-percents">
+						<div class="pcc-percents-wrapper">
+							<span>%</span>
+						</div>
+					</div>
+				</div>
+				<progress style="display: none" id="progress_bar" value="0" max="100"></progress>
+			</div>
+		</div>
 		<div class="meter" style="height: 50px;">
 			<span style="width: 50%;">&nbsp;</span>
 			<div style="display: inline-block; position: relative; top: -17px; /*left: 18px;*/ font-size: 18px; font-weight: bold; ">50%</div>
 		</div>
+-->
 	</a>
 
 <!--
