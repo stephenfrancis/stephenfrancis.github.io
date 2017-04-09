@@ -19,79 +19,79 @@
         <script>
             var l1;
 
-            assert([ "car", [ "hotdog" ] ], [ "hotdog" ]);
+            assert([ car, [ "hotdog" ] ], [ "hotdog" ]);
 
             output("p6");
 
-            assert([ "car", [ [ [ "hotdogs" ] ], [ "and" ], [ "pickle" ], "relish" ] ], [ [ [ "hotdogs" ] ] ]);
+            assert([ car, [ [ [ "hotdogs" ] ], [ "and" ], [ "pickle" ], "relish" ] ], [ [ [ "hotdogs" ] ] ]);
 
-            assert([ "car", "car", [ [ "hotdogs" ], [ "and" ] ] ], [ "hotdogs" ]);
+            assert([ car, car, [ [ "hotdogs" ], [ "and" ] ] ], [ "hotdogs" ]);
 
             assert([ [ [ "a", "b", "c" ], "x", "y", "z" ] ], [ [ [ "a", "b", "c" ], "x", "y", "z" ] ]);
 
-            assert([ "cdr", [ "x", "y", "z" ] ], [ [ "y", "z" ] ]);
+            assert([ cdr, [ "x", "y", "z" ] ], [ [ "y", "z" ] ]);
 
-            assert([ "cdr", [ "y", "z" ] ], [ [ "z" ] ]);
+            assert([ cdr, [ "y", "z" ] ], [ [ "z" ] ]);
 
-            assert([ "cdr", [ "z" ] ], [ [] ]);
+            assert([ cdr, [ "z" ] ], [ [] ]);
 
-            assert([ "cdr", [ [ "a", "b", "c" ], "x", "y", "z" ] ], [ [ "x", "y", "z" ] ]);
+            assert([ cdr, [ [ "a", "b", "c" ], "x", "y", "z" ] ], [ [ "x", "y", "z" ] ]);
 
-            assert([ "cdr", [ [ "x" ], "t", "r" ] ],  [ [ "t", "r" ] ]);
+            assert([ cdr, [ [ "x" ], "t", "r" ] ],  [ [ "t", "r" ] ]);
 
             output("p7");
 
-            assert([ "car", "cdr", [ [ "b" ], [ "x", "y" ], [ [ "c" ] ] ] ], [ [ "x", "y" ] ]);
+            assert([ car, cdr, [ [ "b" ], [ "x", "y" ], [ [ "c" ] ] ] ], [ [ "x", "y" ] ]);
 
-            assert([ "cdr", "cdr", [ [ "b" ], [ "x", "y" ], [ [ "c" ] ] ] ], [ [ [ [ "c" ] ] ] ]);
+            assert([ cdr, cdr, [ [ "b" ], [ "x", "y" ], [ [ "c" ] ] ] ], [ [ [ [ "c" ] ] ] ]);
 
             output("p8");
 
-            assert([ "cons", "peanut", [ "butter", "and", "jelly" ] ], [ [ "peanut", "butter", "and", "jelly" ] ]);
+            assert([ cons, "peanut", [ "butter", "and", "jelly" ] ], [ [ "peanut", "butter", "and", "jelly" ] ]);
 
-            assert([ "cons", [ [ "help" ], "this" ], [ "is", "very", [ [ "hard" ], "to", "learn" ] ] ], [ [ [ [ "help" ], "this" ], "is", "very", [ [ "hard" ], "to", "learn" ] ] ]);
+            assert([ cons, [ [ "help" ], "this" ], [ "is", "very", [ [ "hard" ], "to", "learn" ] ] ], [ [ [ [ "help" ], "this" ], "is", "very", [ [ "hard" ], "to", "learn" ] ] ]);
 
-            assert([ "cons", [ "a", "b", [ "c" ] ], [] ], [ [ [ "a", "b", [ "c" ] ] ] ]);
+            assert([ cons, [ "a", "b", [ "c" ] ], [] ], [ [ [ "a", "b", [ "c" ] ] ] ]);
 
-            assert([ "cons", "a", "car", [ [ "b" ], "c" , "d" ] ], [ [ "a", "b" ] ]);
+            assert([ cons, "a", car, [ [ "b" ], "c" , "d" ] ], [ [ "a", "b" ] ]);
 
-            assert([ "cons", "a", "cdr", [ [ "b" ], "c" , "d" ] ], [ [ "a", "c", "d" ] ]);
+            assert([ cons, "a", cdr, [ [ "b" ], "c" , "d" ] ], [ [ "a", "c", "d" ] ]);
 
             output("p9");
 
-            assert([ "isnull", [] ], [ true ]);
+            assert([ isnull, [] ], [ true ]);
 
-            assert([ "isnull", [ "a", "b", "c" ] ], [ false ]);
+            assert([ isnull, [ "a", "b", "c" ] ], [ false ]);
 
             output("p10");
 
-            assert([ "isatom", "Harry" ], [ true ]);
+            assert([ isatom, "Harry" ], [ true ]);
 
-            assert([ "isatom", [ "Harry", "had", "a", "heap", "of", "apples" ] ], [ false ]);
+            assert([ isatom, [ "Harry", "had", "a", "heap", "of", "apples" ] ], [ false ]);
 
             output("p11");
 
-            assert([ "isatom", "car", [ "Harry", "had", "a", "heap", "of", "apples" ] ], [ true ]);
+            assert([ isatom, car, [ "Harry", "had", "a", "heap", "of", "apples" ] ], [ true ]);
 
-            assert([ "isatom", "cdr", [ "Harry", "had", "a", "heap", "of", "apples" ] ], [ false ]);
+            assert([ isatom, cdr, [ "Harry", "had", "a", "heap", "of", "apples" ] ], [ false ]);
 
-            assert([ "isatom", "cdr", [ "Harry" ] ], [ false ]);
+            assert([ isatom, cdr, [ "Harry" ] ], [ false ]);
 
-            assert([ "isatom", "car", "cdr", [ "swing", "low", "sweet", "cherry", "oat" ] ], [ true ]);
+            assert([ isatom, car, cdr, [ "swing", "low", "sweet", "cherry", "oat" ] ], [ true ]);
 
-            assert([ "isatom", "car", "cdr", [ "swing", [ "low", "sweet" ], "cherry", "oat" ] ], [ false ]);
+            assert([ isatom, car, cdr, [ "swing", [ "low", "sweet" ], "cherry", "oat" ] ], [ false ]);
 
-            assert([ "iseq", "Harry", "Harry" ], [ true ]);
+            assert([ iseq, "Harry", "Harry" ], [ true ]);
 
-            assert([ "iseq", "margarine", "butter" ], [ false ]);
+            assert([ iseq, "margarine", "butter" ], [ false ]);
 
-            assert([ "iseq", "car", [ "Mary", "had", "a", "little", "lamb", "chop" ], "Mary" ], [ true ]);
+            assert([ iseq, car, [ "Mary", "had", "a", "little", "lamb", "chop" ], "Mary" ], [ true ]);
 
             output("p13");
 
             l1 = [ "beans", "beans", "we", "need", "jelly", "beans" ];
 
-            assert([ "iseq", "car", l1, "car", "cdr", l1 ], [ true ]);
+            assert([ iseq, car, l1, car, cdr, l1 ], [ true ]);
         </script>
     </body>
 </html>

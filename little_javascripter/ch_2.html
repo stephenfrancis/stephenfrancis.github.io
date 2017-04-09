@@ -20,32 +20,32 @@
 
             output("p15");
 
-            assert([ "islat", [ "bacon", "and", "eggs" ] ], [ true ]);
+            assert([ islat, [ "bacon", "and", "eggs" ] ], [ true ]);
 
             output("p19");
 
-            assert([ "islat", [ "bacon", [ "and", "eggs" ] ] ], [ false ]);
+            assert([ islat, [ "bacon", [ "and", "eggs" ] ] ], [ false ]);
 
-            assert([ "islat", "cdr", [ "bacon", [ "and", "eggs" ] ] ], [ false ]);
+            assert([ islat, cdr, [ "bacon", [ "and", "eggs" ] ] ], [ false ]);
 
 // this one isn't in the book...
-            assert([ "isatom", "car", [ "bacon", [ "and", "eggs" ] ], "islat", "car", "cdr", [ "bacon", [ "and", "eggs" ] ] ], [ true, true ]);
+            assert([ isatom, car, [ "bacon", [ "and", "eggs" ] ], islat, car, cdr, [ "bacon", [ "and", "eggs" ] ] ], [ true, true ]);
 
             output("p21");
 
-            assert([ "or", "isnull", [], "isatom", [ "d", "e", "f", "g" ] ], [ true ]);
+            assert([ or, isnull, [], isatom, [ "d", "e", "f", "g" ] ], [ true ]);
 
-            assert([ "or", "isnull", [ "a", "b", "c" ], "isnull", [] ], [ true ]);
+            assert([ or, isnull, [ "a", "b", "c" ], isnull, [] ], [ true ]);
 
-            assert([ "or", "isnull", [ "a", "b", "c" ], "isnull", [ "atom" ] ], [ false ]);
+            assert([ or, isnull, [ "a", "b", "c" ], isnull, [ "atom" ] ], [ false ]);
 
             output("p22");
 
-            assert([ "ismember", "tea", [ "coffee", "tea", "or", "milk" ] ], [ true ]);
+            assert([ ismember, "tea", [ "coffee", "tea", "or", "milk" ] ], [ true ]);
 
-            assert([ "ismember", "poached", [ "fried", "eggs", "and", "scrambled", "eggs" ] ], [ false ]);
+            assert([ ismember, "poached", [ "fried", "eggs", "and", "scrambled", "eggs" ] ], [ false ]);
 
-            assert([ "ismember", "meat", [ "mashed", "potatoes", "and", "meat", "gravy" ] ], [ true ]);
+            assert([ ismember, "meat", [ "mashed", "potatoes", "and", "meat", "gravy" ] ], [ true ]);
 
         </script>
     </body>
