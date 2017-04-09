@@ -12,38 +12,46 @@
 		<link rel="stylesheet" type="text/css" href="../external/bootstrap-2.3.1/css/bootstrap.min.css" media="screen" />
 		<link rel="stylesheet" type="text/css" href="../external/bootstrap-2.3.1/css/bootstrap-responsive.min.css" />
 		<style type="text/css">
-body {
-	font-family: Arial;
-}
+			body {
+				font-family: Arial;
+			}
+
+			.block_seq > * {
+				margin: 0 5px 10px 0;
+			}
 		</style>
 	</head>
 	<body>
-		<div class="container-fluid">
-			<h1>Countdowner</h1>
-			<div class="row-fluid">
-				<div class="span6">
-					<p>Enter a sequence of letters and see the largest words that can be made from them, from a list of
-						<a href="http://wordlist.sourceforge.net/12dicts-readme-r5.html" target="_blank">British English
-						words</a>:
-					</p>
-					<div class="form-inline">
-						Pattern:
-						<input id="pattern"      type="text" class="input-medium" placeholder="letters"></input>
-						<button class="btn" id="consonant">Consonant</button>
-						<button class="btn" id="vowel">Vowel</button>
-						<button class="btn" id="go">Go</button>
-					</div>
-					<div id="results"></div>
-				</div>
-			</div>
+		<h1>Countdowner</h1>
+
+		<h2>The Letters</h2>
+		<p>Enter a sequence of letters and see the largest words that can be made from them, from a list of
+			<a href="http://wordlist.sourceforge.net/12dicts-readme-r5.html" target="_blank">British English
+		words</a>
+		</p>
+
+		<h3 id="pattern" style="letter-spacing: 15px;"></h3>
+
+		<div class="block_seq">
+			<button class="btn" id="consonant">Consonant</button>
+			<button class="btn" id="vowel">Vowel</button>
+			<button class="btn" id="clear_one">Clear One</button>
+			<button class="btn" id="clear_all">Clear All</button>
+			<button class="btn btn-primary" id="go">Go</button>
 		</div>
+		<div id="results" class="block_seq"></div>
+
 		<script type="text/javascript" src="../external/jquery.core/jquery-1.7.2.min.js"></script>
 		<script type="text/javascript" src="../external/bootstrap-2.3.1/js/bootstrap.min.js"></script>
 		<script>
+			var blank_char = "_";
+			var number_of_letters = 9;
 			var o = {
 				// max_words: 20,
 				// result_limit: 1000
 			};
+
+			clearAllLetters();
 
 			$(document).on("change", null, function(event) {
 				runUI();
@@ -63,13 +71,52 @@ body {
 				addLetter(getRandomLetter("aaeeeioou"));				// weighted
 			});
 
+			$(document).on("click", "#clear_one", function(event) {
+				clearOneLetter();
+			});
+
+			$(document).on("click", "#clear_all", function(event) {
+				clearAllLetters();
+			});
+
+			$(document).on("keyup", function (event) {
+			    var char =String.fromCharCode(event.which).toUpperCase();
+			    if (char >= "A" && char <= "Z") {
+			    	addLetter(char);
+			    } else if (event.which === 8 || event.which === 46) {
+			    	// backspace or delete
+			    	clearOneLetter();
+			    } else {
+			    	console.log(event.which);
+			    }
+			});
+
 			function getRandomLetter(range) {
 				var rand = Math.floor(Math.random() * range.length);
 				return range.substr(rand, 1);
 			}
 
 			function addLetter(letter) {
-				$("#pattern").val($("#pattern").val() + letter);
+				var curr = $("#pattern").text();
+				var index = curr.indexOf(blank_char);
+				if (index > -1) {
+					curr = curr.replace(blank_char, letter.toUpperCase());
+					$("#pattern").text(curr);
+				}
+			}
+
+			function clearOneLetter() {
+				var curr = $("#pattern").text();
+				var index = curr.indexOf(blank_char);
+				if (index === -1) {
+					index = number_of_letters;
+				}
+				curr = curr.substr(0, index - 1) + blank_char.repeat(number_of_letters - index + 1);
+				$("#pattern").text(curr);
+			}
+
+			function clearAllLetters() {
+				$("#pattern").text(blank_char.repeat(number_of_letters));
 			}
 
 			function runUI() {
@@ -89,14 +136,14 @@ body {
 					count = 0;
 
 			    loadWordlist();
-			    pattern = $("#pattern").val().toLowerCase().replace(/[^a-z]/, "");
+			    pattern = $("#pattern").text().toLowerCase().replace(/[^a-z]/, "");
 			    o.max_words    = parseInt($("#max_words"   ).val(), 10) || 1000;
 			    o.result_limit = parseInt($("#result_limit").val(), 10) ||   20;
 			    o.curr_longest = 0;
 			    o.root_node.anagrams(pattern, results_words);
 			    results.empty();
 			    for (i = 0; i < results_words.length; i += 1) {
-			    	results.append(delim + results_words[i]);
+			    	results.append(delim + results_words[i].toUpperCase());
 			    	delim = ", ";
 			    	count += 1;
 			    }
@@ -216,6 +263,100 @@ body {
 			}
 
 
+		</script>
+
+
+		<h2>The Numbers</h2>
+		<p>Combine the first five numbers using arithmetic operators to reach the target number</a>
+		</p>
+
+		<div class="block_seq">
+			<span class="use_num" id="num1"></span>
+			<span class="use_num" id="num2"></span>
+			<span class="use_num" id="num3"></span>
+			<span class="use_num" id="num4"></span>
+			<span class="use_num" id="num5"></span>
+			<span class="use_num" id="target_num"></span>
+		</div>
+
+		<div class="block_seq">
+			<button class="btn" id="big_num">Big Number</button>
+			<button class="btn" id="little_num">Little Number</button>
+			<button class="btn" id="clear_one_num">Clear One</button>
+			<button class="btn" id="clear_all_nums">Clear All</button>
+			<button class="btn" id="generate_num">Generate Target</button>
+			<button class="btn btn-primary" id="go_nums">Go</button>
+		</div>
+		<div class="block_seq" id="results_num">
+		</div>
+
+		<style type="text/css">
+			.use_num { display: inline-block; width: 55px; height: 20px; font-size: 24pt; background-color: #eee; border: 1px solid #aaa; border-radius: 5px; padding: 10px; text-align: center; }
+			#target_num { width: 70px; background-color: #ddd; border: 1px solid #777; }
+		</style>
+
+		<script>
+			$(document).on("click", "#little_num", function(event) {
+				addLittleNumber();
+			});
+
+			function addLittleNumber() {
+				var num = Math.floor(Math.random() * 9) + 1;
+				addNextNumber(num);
+			}
+
+			$(document).on("click", "#big_num", function(event) {
+				addBigNumber();
+			});
+
+			function addBigNumber() {
+				var num = (Math.floor(Math.random() * 4) + 1) * 25;
+				addNextNumber(num);
+			}
+
+			function addNextNumber(number) {
+				var added = false;
+				$(".use_num:not(#target_num").each(function () {
+					var val = $(this).text();
+					if (!val && !added) {
+						$(this).text(String(number));
+						added = true;
+					}
+				})
+			}
+
+			$(document).on("click", "#generate_num", function(event) {
+				generateTarget();
+			});
+
+			function generateTarget() {
+				var i = 100;
+				function generateAnother() {
+					$("#target_num").text(String(Math.floor(Math.random() * 899) + 100));
+					i -= 1;
+					if (i > 0) {
+						setTimeout(generateAnother, 10);
+					}
+				}
+				generateAnother();
+			}
+
+
+
+			function attempt() {
+				var nums = [];
+				var i = 0;
+				$(".use_num:not(#target_num").each(function () {
+					nums[i] = parseInt($(this).text(), 10);
+					i += 1;
+				});
+				iterateOverCombinations(nums, 0);
+			}
+
+			function iterateOverCombinations(nums, position) {
+				var i = 0;
+
+			}
 		</script>
 	</body>
 </html>
