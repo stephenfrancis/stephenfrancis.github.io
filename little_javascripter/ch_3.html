@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Little JavaScripter - Chapter 3</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="author" content="Stephen Francis">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Baloo+Thambi|Work+Sans" />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <h1>Little JavaScripter - Chapter 3</h1>
+        <div class="app_dynamic">
+        </div>
+        <script src="../external/jquery.core/jquery-1.11.0.min.js"></script>
+        <script src="./common.js"></script>
+        <script>
+
+            output("p33");
+
+            assert([ "rember", "mint", [ "lamb", "chops", "and", "mint", "jelly" ] ], [ [ "lamb", "chops", "and", "jelly" ] ]);
+
+            assert([ "rember", "toast", [ "bacon", "lettuce", "and", "tomato" ] ], [ [ "bacon", "lettuce", "and", "tomato" ] ]);
+
+            assert([ "rember", "cup", [ "coffee", "cup", "tea", "cup", "and", "hick", "cup" ] ], [ [ "coffee", "tea", "cup", "and", "hick", "cup" ] ]);
+
+            output("p43");
+
+            assert([ "firsts", [ [ "apple", "peach", "pumpkin" ], [ "plum", "pear", "cherry" ], [ "grape", "raisin", "pea" ], [ "bean", "carrot", "eggplant" ] ] ], [ [ "apple", "plum", "grape", "bean" ] ]);
+
+            assert([ "firsts", [ [ "a", "b" ], [ "c", "d" ], [ "e", "f" ] ] ], [ [ "a", "c", "e" ] ]);
+
+            assert([ "firsts", [] ], [ [] ]);
+
+            assert([ "firsts", [ [ "five", "plums" ], [ "four" ], [ "eleven", "green", "oranges" ] ] ], [ [ "five", "four", "eleven" ] ]);
+
+            assert([ "firsts", [ [ [ "five", "plums"], "four" ], [ "eleven", "green", "oranges" ], [ [ "no" ], "more" ] ] ], [ [ [ "five", "plums" ], "eleven", [ "no" ] ] ]);
+
+        </script>
+    </body>
+</html>

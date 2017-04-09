@@ -109,6 +109,9 @@ function doList(list) {
         if (typeof out[i] === "string" && typeof wrappers[out[i]] === "function") {
             wrappers[out[i]](out, i);
         }
+        if (typeof out[i] === "string" && typeof this[out[i]] === "function" && typeof this[out[i]].arity === "number") {
+            doListAuto(out, i);
+        }
     }
     console.log("doList(" + convertToString(list) +") = " + convertToString(out));
     return out;
@@ -123,6 +126,28 @@ function doList(list) {
     console.log("doList(" + convertToString(list) +") = " + convertToString(out));
     return out;
 */
+}
+
+function doListAuto(list, i) {
+    var funct = this[list[i]];
+    var args = funct.arity;
+    var resp;
+    if (list.length < (i + args + 1)) {
+        throw "insufficient remaining terms in list: " + list + " at term " + i + " for arity " + args;
+    }
+    if (args > 3) {
+        throw "can only support arity up to 3";
+    }
+    if (args === 0) {
+        resp = funct();
+    } else if (args === 1) {
+        resp = funct(list[i + 1]);
+    } else if (args === 2) {
+        resp = funct(list[i + 1], [i + 2]);
+    } else if (args === 3) {
+        resp = funct(list[i + 1], [i + 2], [i + 3]);
+    }
+    list.splice(i, (args + 1), resp);
 }
 
 function exprToList(str) {
@@ -197,3 +222,58 @@ wrappers.islat = function (list, i) {
     var args = 1;
     list.splice(i, (args + 1), islat(list[i + 1]));
 }
+
+
+wrappers.or = function (list, i) {
+    var args = 2;
+    list.splice(i, (args + 1), (list[i + 1] || list[i + 2]));
+}
+
+
+wrappers.plus = function (list, i) {
+    var args = 2;
+    list.splice(i, (args + 1), (list[i + 1] + list[i + 2]));
+}
+
+function ismember(atom, lat) {
+    if (isnull(lat)) {
+        return false;
+    } else {
+        return iseq(atom, car(lat)) || ismember(atom, cdr(lat));
+    }
+}
+
+wrappers.ismember = function (list, i) {
+    var args = 2;
+    list.splice(i, (args + 1), ismember(list[i + 1], list[i + 2]));
+}
+
+function rember(atom, lat) {
+    if (isnull(lat)) {
+        return lat;
+    } else if (iseq(atom, car(lat))) {
+        return cdr(lat);
+    } else {
+        return cons(car(lat), rember(atom, cdr(lat)));
+    }
+}
+
+wrappers.rember = function (list, i) {
+    var args = 2;
+    list.splice(i, (args + 1), rember(list[i + 1], list[i + 2]));
+}
+
+function firsts(list) {
+    if (isnull(list)) {
+        return list;
+    } else {
+        return cons(car(car(list)), firsts(cdr(list)));
+    }
+}
+firsts.arity = 1;
+
+// wrappers.firsts = function (list, i) {
+//     var args = 2;
+//     list.splice(i, (args + 1), firsts(list[i + 1], list[i + 2]));
+// }
+
