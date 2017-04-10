@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Countdowner</title>
+		<title>Countdowner - The Letters</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -22,9 +22,8 @@
 		</style>
 	</head>
 	<body>
-		<h1>Countdowner</h1>
-
-		<h2>The Letters</h2>
+		<h1>Countdowner - The Letters</h1>
+        <p>(Do the Numbers <a href="numbers.html">here</a>)</p>
 		<p>Enter a sequence of letters and see the largest words that can be made from them, from a list of
 			<a href="http://wordlist.sourceforge.net/12dicts-readme-r5.html" target="_blank">British English
 		words</a>
@@ -33,6 +32,7 @@
 		<h3 id="pattern" style="letter-spacing: 15px;"></h3>
 
 		<div class="block_seq">
+            <input type="number" id="num_letters" style="width: 30px;"></span>
 			<button class="btn" id="consonant">Consonant</button>
 			<button class="btn" id="vowel">Vowel</button>
 			<button class="btn" id="clear_one">Clear One</button>
@@ -53,9 +53,14 @@
 
 			clearAllLetters();
 
-			$(document).on("change", null, function(event) {
-				runUI();
+			$(document).on("change", "#num_letters", function(event) {
+				number_of_letters = parseInt($(this).val(), 10);
+				clearAllLetters();
 			});
+
+			// $(document).on("change", null, function(event) {
+			// 	runUI();
+			// });
 
 			$(document).on("click", "#go", function(event) {
 				runUI();
@@ -116,6 +121,7 @@
 			}
 
 			function clearAllLetters() {
+				$("#num_letters").val(number_of_letters);
 				$("#pattern").text(blank_char.repeat(number_of_letters));
 			}
 
@@ -127,27 +133,22 @@
 			}
 
 			function run() {
-				var regex,
-					i,
-					pattern,
-					results_words = [],
-					results = $("#results"),
-					delim = "",
-					count = 0;
+				var results_words = [];
+				var results = $("#results");
+				var delim = "";
+			    var pattern = $("#pattern").text().toLowerCase().replace(/[^a-z]/, "");
 
 			    loadWordlist();
-			    pattern = $("#pattern").text().toLowerCase().replace(/[^a-z]/, "");
-			    o.max_words    = parseInt($("#max_words"   ).val(), 10) || 1000;
+			    o.max_words = parseInt($("#max_words"   ).val(), 10) || 1000;
 			    o.result_limit = parseInt($("#result_limit").val(), 10) ||   20;
 			    o.curr_longest = 0;
 			    o.root_node.anagrams(pattern, results_words);
 			    results.empty();
-			    for (i = 0; i < results_words.length; i += 1) {
-			    	results.append(delim + results_words[i].toUpperCase());
+			    results_words.forEach(function (word) {
+			    	results.append(delim + word.toUpperCase());
 			    	delim = ", ";
-			    	count += 1;
-			    }
-			    results.append("<br/><b>" + count + " words matched</b>");
+			    });
+			    results.append("<br/><b>" + results_words.length + " words matched</b> - longest has " + o.curr_longest + " letters");
 			}
 
 			function Node(letter, prev, level) {
@@ -174,6 +175,7 @@
 					this.next[initial].add(word.substr(1));
 				}
 			}
+
 			Node.prototype.getWord = function (suffix) {
 				if (typeof suffix !== "string") {
 					suffix = "";
@@ -184,6 +186,7 @@
 				}
 				return suffix;
 			}
+
 			Node.prototype.getRandom = function () {
 				var rand = Math.floor(Math.random() * (this.count + (this.ends_word ? 1 : 0)));
 				if (this.ends_word && rand === this.count) {
@@ -199,164 +202,47 @@
 				}
 				throw "should never reach here";
 			}
+
 			Node.prototype.anagrams = function (string, results, prefix, prev_word) {
-				var i,
-					initial;
+				var i;
+				var initial;
 
 				if (typeof prefix !== "string") {
 					prefix = "";
 				}
-/*
-				if (string.length === 0) {
+
+				if (this.ends_word) {
 					if (prefix.length >= o.curr_longest) {
 						results.push(prefix);
 						o.curr_longest = prefix.length;
 					}
-				// } else if (results.length >= o.result_limit || prefix.split(" ").length > o.max_words) {
-				// 	return;
-				} else {
-*/
-					if (this.ends_word) {
-						if (prefix.length >= o.curr_longest) {
-							results.push(prefix);
-							o.curr_longest = prefix.length;
-						}
-			    		// o.root_node.anagrams(string, results, prefix + " ", prefix.substr(prefix.lastIndexOf(" ") + 1));
-//			    		this.anagrams(string, results, prefix + " ");
-					}
-					for (initial in this.next) {
-						if (this.next.hasOwnProperty(initial) && (i = string.indexOf(initial)) > -1) {
-							// if (!prev_word || prev_word.substr(this.level, 1) < initial) {
-								this.next[initial].anagrams(string.substr(0, i) + string.substr(i + 1), results, prefix + initial);
-							// }
-						}
-					}
-//					for (i = 0; i < string.length; i += 1) {
-//						initial = string.substr(i, 1);
-//						if (this.next[initial] && string.indexOf(initial) === i) {		// only use 1st occurrence if multiple...
-//							console.log(prefix + initial);
-//							this.next[initial].anagrams(string.substr(0, i) + string.substr(i+1), results, prefix + initial);
-//						}
-//					}
 				}
-			// }
+				for (initial in this.next) {
+					if (this.next.hasOwnProperty(initial) && (i = string.indexOf(initial)) > -1) {
+						this.next[initial].anagrams(string.substr(0, i) + string.substr(i + 1), results, prefix + initial);
+					}
+				}
+			}
+
 			o.root_node = new Node("");
 
 			function loadWordlist() {
 			    if (!o.words_added) {
 					$.ajax({ url: "../wordlists/2of4brif.txt", type: "GET", async: false,
 						success: function(data_back) {
-							var allwords = data_back.split("\r\n"),
-								i;
-							for (i = 0; i < allwords.length; i += 1) {
-								if (allwords[i].length > 0) {
-									o.root_node.add(allwords[i]);
+							var allwords = data_back.split("\r\n");
+							allwords.forEach(function (word) {
+								if (word.length > 0) {
+									o.root_node.add(word);
 								}
-							}
+							});
 							o.words_added = true;
-							for (i = 0; i < 10; i += 1) {
-								console.log(o.root_node.getRandom());
-							}
+							console.log(o.root_node.getRandom());
 						}
 					});
 			    }
 			}
 
-
-		</script>
-
-
-		<h2>The Numbers</h2>
-		<p>Combine the first five numbers using arithmetic operators to reach the target number</a>
-		</p>
-
-		<div class="block_seq">
-			<span class="use_num" id="num1"></span>
-			<span class="use_num" id="num2"></span>
-			<span class="use_num" id="num3"></span>
-			<span class="use_num" id="num4"></span>
-			<span class="use_num" id="num5"></span>
-			<span class="use_num" id="target_num"></span>
-		</div>
-
-		<div class="block_seq">
-			<button class="btn" id="big_num">Big Number</button>
-			<button class="btn" id="little_num">Little Number</button>
-			<button class="btn" id="clear_one_num">Clear One</button>
-			<button class="btn" id="clear_all_nums">Clear All</button>
-			<button class="btn" id="generate_num">Generate Target</button>
-			<button class="btn btn-primary" id="go_nums">Go</button>
-		</div>
-		<div class="block_seq" id="results_num">
-		</div>
-
-		<style type="text/css">
-			.use_num { display: inline-block; width: 55px; height: 20px; font-size: 24pt; background-color: #eee; border: 1px solid #aaa; border-radius: 5px; padding: 10px; text-align: center; }
-			#target_num { width: 70px; background-color: #ddd; border: 1px solid #777; }
-		</style>
-
-		<script>
-			$(document).on("click", "#little_num", function(event) {
-				addLittleNumber();
-			});
-
-			function addLittleNumber() {
-				var num = Math.floor(Math.random() * 9) + 1;
-				addNextNumber(num);
-			}
-
-			$(document).on("click", "#big_num", function(event) {
-				addBigNumber();
-			});
-
-			function addBigNumber() {
-				var num = (Math.floor(Math.random() * 4) + 1) * 25;
-				addNextNumber(num);
-			}
-
-			function addNextNumber(number) {
-				var added = false;
-				$(".use_num:not(#target_num").each(function () {
-					var val = $(this).text();
-					if (!val && !added) {
-						$(this).text(String(number));
-						added = true;
-					}
-				})
-			}
-
-			$(document).on("click", "#generate_num", function(event) {
-				generateTarget();
-			});
-
-			function generateTarget() {
-				var i = 100;
-				function generateAnother() {
-					$("#target_num").text(String(Math.floor(Math.random() * 899) + 100));
-					i -= 1;
-					if (i > 0) {
-						setTimeout(generateAnother, 10);
-					}
-				}
-				generateAnother();
-			}
-
-
-
-			function attempt() {
-				var nums = [];
-				var i = 0;
-				$(".use_num:not(#target_num").each(function () {
-					nums[i] = parseInt($(this).text(), 10);
-					i += 1;
-				});
-				iterateOverCombinations(nums, 0);
-			}
-
-			function iterateOverCombinations(nums, position) {
-				var i = 0;
-
-			}
 		</script>
 	</body>
 </html>

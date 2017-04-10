@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Countdowner - The Numbers</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="Enter a sequence of letters and see its anagrams from a list of British English words">
+        <meta name="author" content="Stephen Francis">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <link rel="stylesheet" type="text/css" href="../external/bootstrap-2.3.1/css/bootstrap.min.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="../external/bootstrap-2.3.1/css/bootstrap-responsive.min.css" />
+        <style type="text/css">
+            body {
+                font-family: Arial;
+            }
+
+            .block_seq > * {
+                margin: 0 5px 10px 0;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Countdowner - The Numbers</h1>
+        <p>(Do the Letters <a href="index.html">here</a>)</p>
+        <p>Combine the first six numbers using arithmetic operators to reach the target number</a>
+        </p>
+
+        <div class="block_seq">
+            <input type="number" class="use_num" id="num1"></span>
+            <input type="number" class="use_num" id="num2"></span>
+            <input type="number" class="use_num" id="num3"></span>
+            <input type="number" class="use_num" id="num4"></span>
+            <input type="number" class="use_num" id="num5"></span>
+            <input type="number" class="use_num" id="num6"></span>
+            <input type="number" class="use_num" id="target_num"></span>
+        </div>
+
+        <div class="block_seq">
+            <button class="btn" id="big_num">Big Number</button>
+            <button class="btn" id="little_num">Little Number</button>
+            <button class="btn" id="clear_one_num">Clear One</button>
+            <button class="btn" id="clear_all_nums">Clear All</button>
+            <button class="btn" id="generate_num">Generate Target</button>
+            <button class="btn btn-primary" id="go_nums">Go</button>
+        </div>
+        <div class="block_seq" id="results_num" style="font-weight: bold;">
+        </div>
+
+        <style type="text/css">
+            input.use_num { width: 65px; height: 20px; font-size: 24pt; background-color: #eee; border: 1px solid #aaa; border-radius: 5px; padding: 10px; text-align: center; }
+            #target_num { width: 70px; background-color: #ddd; border: 1px solid #777; }
+        </style>
+
+        <script type="text/javascript" src="../external/jquery.core/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="../external/bootstrap-2.3.1/js/bootstrap.min.js"></script>
+        <script>
+            var target_num;
+            var stop_working;
+
+            $(document).on("click", "#little_num", function(event) {
+                addLittleNumber();
+            });
+
+            function addLittleNumber() {
+                var num = Math.floor(Math.random() * 9) + 1;
+                addNextNumber(num);
+            }
+
+            $(document).on("click", "#big_num", function(event) {
+                addBigNumber();
+            });
+
+            function addBigNumber() {
+                var num = (Math.floor(Math.random() * 4) + 1) * 25;
+                addNextNumber(num);
+            }
+
+            function addNextNumber(number) {
+                var added = false;
+                $(".use_num:not(#target_num)").each(function () {
+                    var val = $(this).val();
+                    if (!val && !added) {
+                        $(this).val(String(number));
+                        added = true;
+                    }
+                });
+            }
+
+            $(document).on("click", "#clear_one_num", function(event) {
+                var done = false;
+                $(".use_num:not(#target_num)").toArray().reverse().forEach(function (cell) {
+                    var val = $(cell).val();
+                    if (val && !done) {
+                        $(cell).val("");
+                        done = true;
+                    }
+                });
+            });
+
+            $(document).on("click", "#clear_all_nums", function(event) {
+                $(".use_num:not(#target_num").each(function () {
+                    $(this).val("");
+                });
+            });
+
+            $(document).on("click", "#generate_num", function(event) {
+                generateTarget();
+            });
+
+            function generateTarget() {
+                var i = 100;
+                function generateAnother() {
+                    $("#target_num").val(String(Math.floor(Math.random() * 899) + 100));
+                    i -= 1;
+                    if (i > 0) {
+                        setTimeout(generateAnother, 10);
+                    }
+                }
+                generateAnother();
+            }
+
+
+            $(document).on("click", "#go_nums", function(event) {
+                attempt();
+            });
+
+            function attempt() {
+                var nums = [];
+                var comb = [];
+                var i = 0;
+                $("#results_num").text("working...");
+                $(".use_num:not(#target_num").each(function () {
+                    nums[i] = parseInt($(this).val(), 10);
+                    i += 1;
+                });
+                target_num = parseInt($("#target_num").val(), 10);
+                stop_working = false;
+                setTimeout(function () {
+                    iterateOverCombinations(nums, [], 0);
+                    if (!stop_working) {
+                        $("#results_num").text("couldn't find an answer");
+                    }
+                }, 10);
+            }
+
+            function iterateOverCombinations(nums, comb, position) {
+                var i = 0;
+                if (stop_working) {
+                    return;
+                }
+                if (position === nums.length) {
+                    workWithCombination(nums, comb);
+                    return;
+                }
+                for (i = 0; i < nums.length; i += 1) {
+                    comb.splice(position + 1, nums.length - position);      // remove subsequent elements
+                    if (comb.indexOf(i) === -1) {
+                        comb[position] = i;
+                        iterateOverCombinations(nums, comb, position + 1);
+                    }
+                }
+
+            }
+
+            function workWithCombination(nums, comb) {
+                var reordered = [];
+                var i;
+                for (i = 0; i < comb.length; i += 1) {
+                    reordered[i] = nums[comb[i]];
+                }
+                combineDownByAPair(reordered, reordered);
+            }
+
+            function combineDownByAPair(strings, numbers) {
+                var i;
+                var temp_strs;
+                var temp_nums;
+                if (strings.length <= 1) {
+                    return;
+                }
+                function combineAndCall(oper, new_num) {
+                    temp_strs[i] = " ( " + strings[i] + oper + strings[i + 1] + " ) ";
+                    temp_nums[i] = new_num;
+                    if (!isNaN(new_num)) {
+                        tryArrangement(temp_strs[i], new_num);
+                        combineDownByAPair(temp_strs, temp_nums);
+                    }
+                }
+                for (i = 0; i < strings.length - 1; i += 1) {
+                    temp_strs = strings.slice(0);
+                    temp_nums = numbers.slice(0);
+                    temp_strs.splice(i, 1);
+                    temp_nums.splice(i, 1);
+                    combineAndCall(" + ", numbers[i] + numbers[i + 1]);
+                    combineAndCall(" - ", numbers[i] - numbers[i + 1]);
+                    combineAndCall(" x ", numbers[i] * numbers[i + 1]);
+                    combineAndCall(" / ", numbers[i] / numbers[i + 1]);
+                }
+            }
+
+            function tryArrangement(expr, ans) {
+                // var ans = parseInt(eval(expr), 10);
+                if (ans === target_num) {
+                    console.log(expr + " = " + ans);
+                    $("#results_num").text(expr);
+                    stop_working = true;
+                }
+            }
+        </script>
+    </body>
+</html>
