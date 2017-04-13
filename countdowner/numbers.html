@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="description" content="Enter a sequence of letters and see its anagrams from a list of British English words">
+        <meta name="description" content="Combine the first six numbers using arithmetic operators to reach the target number">
         <meta name="author" content="Stephen Francis">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -40,10 +40,10 @@
         <div class="block_seq">
             <button class="btn" id="big_num">Big Number</button>
             <button class="btn" id="little_num">Little Number</button>
-            <button class="btn" id="clear_one_num">Clear One</button>
-            <button class="btn" id="clear_all_nums">Clear All</button>
             <button class="btn" id="generate_num">Generate Target</button>
             <button class="btn btn-primary" id="go_nums">Go</button>
+            <button class="btn" id="clear_one_num">Clear One</button>
+            <button class="btn" id="clear_all_nums">Clear All</button>
         </div>
         <div class="block_seq" id="results_num" style="font-weight: bold;">
         </div>
@@ -100,9 +100,10 @@
             });
 
             $(document).on("click", "#clear_all_nums", function(event) {
-                $(".use_num:not(#target_num").each(function () {
+                $(".use_num").each(function () {
                     $(this).val("");
                 });
+                $("#results_num").text("");
             });
 
             $(document).on("click", "#generate_num", function(event) {
@@ -131,7 +132,7 @@
                 var comb = [];
                 var i = 0;
                 $("#results_num").text("working...");
-                $(".use_num:not(#target_num").each(function () {
+                $(".use_num:not(#target_num)").each(function () {
                     nums[i] = parseInt($(this).val(), 10);
                     i += 1;
                 });
