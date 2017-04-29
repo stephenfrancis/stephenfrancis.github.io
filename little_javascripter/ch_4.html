@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Little JavaScripter - Chapter 4. Numbers Games</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="author" content="Stephen Francis">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Baloo+Thambi|Work+Sans" />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <h1>Little JavaScripter - Chapter 4. Numbers Games</h1>
+        <p><a href="index.html">Back to index</a></p>
+        <div class="app_dynamic">
+        </div>
+        <script src="../external/jquery.core/jquery-1.11.0.min.js"></script>
+        <script src="./common.js"></script>
+        <script>
+
+            output("p59");
+
+            assert([ isatom, 14 ], [ true ]);
+
+            assert([ isatom, -3 ], [ true ]);
+
+            assert([ isatom, 3.14159265 ], [ true ]);
+
+            assert([ add1, 67 ], [ 68 ]);
+
+            output("p60");
+
+            assert([ iszero, 0 ], [ true ]);
+
+            assert([ iszero, 1492 ], [ false ]);
+
+            assert([ plus, 46, 12 ], [ 58 ]);
+
+            output("p61");
+
+            assert([ minus, 14, 3 ], [ 11 ]);
+
+            output("p62");
+
+            assert([ addtup, [ 3, 5, 2, 8 ] ], [ 18 ]);
+
+            assert([ addtup, [ 15, 6, 7, 12, 3 ] ], [ 43 ]);
+
+            output("p64");
+
+            assert([ multiply, 5, 3 ], [ 15 ]);
+
+            assert([ multiply, 13, 4 ], [ 52 ]);
+
+            output("p67");
+
+            assert([ tupplus, [ 3, 6, 9, 11, 4 ], [ 8, 5, 2, 0, 7 ] ], [ [ 11, 11, 11, 11, 11 ] ]);
+
+            output("p68");
+
+            assert([ tupplus, [ 2, 3 ], [ 4, 6 ] ], [ [ 6, 9 ] ]);
+
+            assert([ tupplus, [ 3, 7 ], [ 4, 6, 8, 1 ] ], [ [ 7, 13, 8, 1 ] ]);
+
+            output("p71");
+
+            assert([ greaterthan, 12, 133 ], [ false ]);
+
+            assert([ greaterthan, 120, 11 ], [ true ]);
+
+            assert([ greaterthan, 3, 3 ], [ false ]);
+
+            output("p73");
+
+            assert([ lessthan, 4, 6 ], [ true ]);
+
+            assert([ lessthan, 8, 3 ], [ false ]);
+
+            assert([ lessthan, 6, 6 ], [ false ]);
+
+            assert([ equals, 4, 6 ], [ false ]);
+
+            assert([ equals, 8, 3 ], [ false ]);
+
+            assert([ equals, 6, 6 ], [ true ]);
+
+            output("p74");
+
+            assert([ power, 1, 1 ], [ 1 ]);
+
+            assert([ power, 2, 3 ], [ 8 ]);
+
+            assert([ power, 5, 3 ], [ 125 ]);
+
+            output("p75");
+
+            assert([ divide, 15, 4 ], [ 3 ]);
+
+            output("p76");
+
+            assert([ lenlat, [ "hotdogs", "with", "mustard", "sauerkraut", "and", "pickles" ] ], [ 6 ]);
+
+            assert([ lenlat, [ "ham", "and", "cheese", "on", "rye" ] ], [ 5 ]);
+
+            assert([ pick, 4, [ "lasagna", "spaghetti", "ravioli", "macaroni", "meatball" ] ], [ "macaroni" ]);
+
+            assert([ rempick, 3, [ "hotdogs", "with", "hot", "mustard" ] ], [ [ "hotdogs", "with", "mustard" ] ]);
+
+            output("p77");
+
+            assert([ nonums, [ 5, "pears", 6, "prunes", 9, "dates" ] ], [ [ "pears", "prunes", "dates" ] ]);
+
+            assert([ allnums, [ 5, "pears", 6, "prunes", 9, "dates" ] ], [ [ 5, 6, 9 ] ]);
+
+            output("p78");
+
+            assert([ occur, "hotdogs", [ "hotdogs", "with", "hotdogs", "sauerkraut", "and", "more", "hotdogs" ] ], [ 3 ]);
+
+        </script>
+    </body>
+</html>

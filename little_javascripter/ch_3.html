@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Little JavaScripter - Chapter 3</title>
+        <title>Little JavaScripter - Chapter 3. Cons the Magnificent</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -11,7 +11,8 @@
         <link rel="stylesheet" href="style.css" />
     </head>
     <body>
-        <h1>Little JavaScripter - Chapter 3</h1>
+        <h1>Little JavaScripter - Chapter 3. Cons the Magnificent</h1>
+        <p><a href="index.html">Back to index</a></p>
         <div class="app_dynamic">
         </div>
         <script src="../external/jquery.core/jquery-1.11.0.min.js"></script>
@@ -57,6 +58,20 @@
             output("p52");
 
             assert([ subst2, "e", "d", "g", [ "a", "b", "c", "d", "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "e", "f", "g", "d", "h" ] ]);
+
+            output("p53");
+
+            assert([ multirember, "cup", [ "coffee", "cup", "tea", "cup", "and", "hick", "cup" ] ], [ [ "coffee", "tea", "and", "hick" ] ]);
+
+            output("p56");
+
+            assert([ multiinsertR, "jalapeno", "and", [ "tacos", "and", "tamales", "and", "salsa" ] ], [ [ "tacos", "and", "jalapeno", "tamales", "and", "jalapeno", "salsa" ] ]);
+
+            output("p57");
+
+            assert([ multiinsertL, "e", "d", [ "a", "b", "c", "d", "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "e", "d", "f", "g", "e", "d", "h" ] ]);
+
+            assert([ multisubst, "e", "d", [ "a", "b", "c", "d", "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "e", "f", "g", "e", "h" ] ]);
 
         </script>
     </body>
