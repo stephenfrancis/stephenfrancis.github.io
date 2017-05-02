@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Little JavaScripter - Chapter 1. Toys</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="author" content="Stephen Francis">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Baloo+Thambi|Work+Sans" />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <h1>Little JavaScripter - Chapter 6. Shadows</h1>
+        <p><a href="index.html">Back to index</a></p>
+        <div class="app_dynamic">
+        </div>
+        <script src="../external/jquery.core/jquery-1.11.0.min.js"></script>
+        <script src="./common.js"></script>
+        <script>
+
+            output("p98");
+
+            function isnumbered(aexp) {
+                if (isatom(aexp)) {
+                    return isnumber(aexp);
+                } else {
+                    return isnumbered(car(aexp)) && isnumbered(car(cdr(cdr(aexp))));
+                }
+            }
+            isnumbered.arity = 1;
+
+            assert([ isnumbered, [ 3, "+", [ 4, "^", 5 ] ] ], [ true ]);
+
+            assert([ isnumbered, [ 3, "x", "sausage" ] ], [ false ]);
+
+            output("p101");
+
+            function value(aexp) {
+                if (isatom(aexp)) {
+                    return aexp;
+                } else if (car(cdr(aexp)) === "+") {
+                    return value(car(aexp)) + value(car(cdr(cdr(aexp))));
+                } else if (car(cdr(aexp)) === "x") {
+                    return value(car(aexp)) * value(car(cdr(cdr(aexp))));
+                } else if (car(cdr(aexp)) === "^") {
+                    return Math.pow(value(car(aexp)), value(car(cdr(cdr(aexp)))));
+                }
+            }
+            value.arity = 1;
+
+            assert([ value, 13 ], [ 13 ]);
+
+            assert([ value, [ 1, "+", 3 ] ], [ 4 ]);
+
+            output("p102");
+
+            assert([ value, [ 1, "+", [ 3, "^", 4 ] ] ], [ 82 ]);
+
+            function subExpr1(aexp) {
+                return car(cdr(aexp));
+            }
+            subExpr1.arity = 1;
+
+
+            function subExpr2(aexp) {
+                return car(cdr(cdr(aexp)));
+            }
+            subExpr2.arity = 1;
+
+            function operator(aexp) {
+                return car(aexp);
+            }
+            operator.arity = 1;
+
+            function value2(aexp) {
+                if (isatom(aexp)) {
+                    return aexp;
+                } else if (operator(aexp) === "+") {
+                    return value2(subExpr1(aexp)) + value2(subExpr2(aexp));
+                } else if (operator(aexp) === "x") {
+                    return value2(subExpr1(aexp)) * value2(subExpr2(aexp));
+                } else if (operator(aexp) === "^") {
+                    return Math.pow(value2(subExpr1(aexp)), value2(subExpr2(aexp)));
+                }
+            }
+            value2.arity = 1;
+
+            assert([ value2, [ "+", 1, [ "^", 3, 4 ] ] ], [ 82 ]);
+
+        </script>
+    </body>
+</html>

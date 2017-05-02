@@ -21,6 +21,18 @@
 
             output("p33");
 
+
+            function rember(atom, lat) {
+                if (isnull(lat)) {
+                    return lat;
+                } else if (iseq(atom, car(lat))) {
+                    return cdr(lat);
+                } else {
+                    return cons(car(lat), rember(atom, cdr(lat)));
+                }
+            }
+            rember.arity = 2;
+
             assert([ rember, "mint", [ "lamb", "chops", "and", "mint", "jelly" ] ], [ [ "lamb", "chops", "and", "jelly" ] ]);
 
             assert([ rember, "toast", [ "bacon", "lettuce", "and", "tomato" ] ], [ [ "bacon", "lettuce", "and", "tomato" ] ]);
@@ -28,6 +40,15 @@
             assert([ rember, "cup", [ "coffee", "cup", "tea", "cup", "and", "hick", "cup" ] ], [ [ "coffee", "tea", "cup", "and", "hick", "cup" ] ]);
 
             output("p43");
+
+            function firsts(list) {
+                if (isnull(list)) {
+                    return list;
+                } else {
+                    return cons(car(car(list)), firsts(cdr(list)));
+                }
+            }
+            firsts.arity = 1;
 
             assert([ firsts, [ [ "apple", "peach", "pumpkin" ], [ "plum", "pear", "cherry" ], [ "grape", "raisin", "pea" ], [ "bean", "carrot", "eggplant" ] ] ], [ [ "apple", "plum", "grape", "bean" ] ]);
 
@@ -41,6 +62,17 @@
 
             output("p47");
 
+            function insertR(new_at, old_at, lat) {
+                if (isnull(lat)) {
+                    return lat;
+                } else if (iseq(old_at, car(lat))) {
+                    return cons(old_at, cons(new_at, cdr(lat)));
+                } else {
+                    return cons(car(lat), insertR(new_at, old_at, cdr(lat)));
+                }
+            }
+            insertR.arity = 3;
+
             assert([ insertR, "topping", "fudge", [ "ice", "cream", "with", "fudge", "for", "dessert" ] ], [ [ "ice", "cream", "with", "fudge", "topping", "for", "dessert" ] ]);
 
             assert([ insertR, "jalapeno", "and", [ "tacos", "tamales", "and", "salsa" ] ], [ [ "tacos", "tamales", "and", "jalapeno", "salsa" ] ]);
@@ -51,25 +83,102 @@
 
             output("p51");
 
+            function insertL(new_at, old_at, lat) {
+                if (isnull(lat)) {
+                    return lat;
+                } else if (iseq(old_at, car(lat))) {
+                    return cons(new_at, lat);
+                } else {
+                    return cons(car(lat), insertL(new_at, old_at, cdr(lat)));
+                }
+            }
+            insertL.arity = 3;
+
             assert([ insertL, "e", "d", [ "a", "b", "c", "d", "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "e", "d", "f", "g", "d", "h" ] ]);
+
+            function subst(new_at, old_at, lat) {
+                if (isnull(lat)) {
+                    return lat;
+                } else if (iseq(old_at, car(lat))) {
+                    return cons(new_at, cdr(lat));
+                } else {
+                    return cons(car(lat), subst(new_at, old_at, cdr(lat)));
+                }
+            }
+            subst.arity = 3;
 
             assert([ subst, "e", "d", [ "a", "b", "c", "d", "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "e", "f", "g", "d", "h" ] ]);
 
             output("p52");
 
+            function subst2(new_at, old1, old2, lat) {
+                if (isnull(lat)) {
+                    return lat;
+                } else if (or(iseq(old1, car(lat)), iseq(old2, car(lat)))) {
+                    return cons(new_at, cdr(lat));
+                } else {
+                    return cons(car(lat), subst2(new_at, old1, old2, cdr(lat)));
+                }
+            }
+            subst2.arity = 4;
+
             assert([ subst2, "e", "d", "g", [ "a", "b", "c", "d", "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "e", "f", "g", "d", "h" ] ]);
 
             output("p53");
+
+            function multirember(atom, lat) {
+                if (isnull(lat)) {
+                    return lat;
+                } else if (iseq(atom, car(lat))) {
+                    return multirember(atom, cdr(lat));
+                } else {
+                    return cons(car(lat), multirember(atom, cdr(lat)));
+                }
+            }
+            multirember.arity = 2;
 
             assert([ multirember, "cup", [ "coffee", "cup", "tea", "cup", "and", "hick", "cup" ] ], [ [ "coffee", "tea", "and", "hick" ] ]);
 
             output("p56");
 
+            function multiinsertR(new_at, old_at, lat) {
+                if (isnull(lat)) {
+                    return lat;
+                } else if (iseq(old_at, car(lat))) {
+                    return cons(old_at, cons(new_at, multiinsertR(new_at, old_at, cdr(lat))));
+                } else {
+                    return cons(car(lat), multiinsertR(new_at, old_at, cdr(lat)));
+                }
+            }
+            multiinsertR.arity = 3;
+
             assert([ multiinsertR, "jalapeno", "and", [ "tacos", "and", "tamales", "and", "salsa" ] ], [ [ "tacos", "and", "jalapeno", "tamales", "and", "jalapeno", "salsa" ] ]);
 
             output("p57");
 
+            function multiinsertL(new_at, old_at, lat) {
+                if (isnull(lat)) {
+                    return lat;
+                } else if (iseq(old_at, car(lat))) {
+                    return cons(new_at, cons(old_at, multiinsertL(new_at, old_at, cdr(lat))));
+                } else {
+                    return cons(car(lat), multiinsertL(new_at, old_at, cdr(lat)));
+                }
+            }
+            multiinsertL.arity = 3;
+
             assert([ multiinsertL, "e", "d", [ "a", "b", "c", "d", "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "e", "d", "f", "g", "e", "d", "h" ] ]);
+
+            function multisubst(new_at, old_at, lat) {
+                if (isnull(lat)) {
+                    return lat;
+                } else if (iseq(old_at, car(lat))) {
+                    return cons(new_at, multisubst(new_at, old_at, cdr(lat)));
+                } else {
+                    return cons(car(lat), multisubst(new_at, old_at, cdr(lat)));
+                }
+            }
+            multisubst.arity = 3;
 
             assert([ multisubst, "e", "d", [ "a", "b", "c", "d", "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "e", "f", "g", "e", "h" ] ]);
 

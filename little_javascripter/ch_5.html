@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Little JavaScripter - Chapter 1. Toys</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="author" content="Stephen Francis">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Baloo+Thambi|Work+Sans" />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <h1>Little JavaScripter - Chapter 5. *Oh My Gawd*: It's Full of Stars</h1>
+        <p><a href="index.html">Back to index</a></p>
+        <div class="app_dynamic">
+        </div>
+        <script src="../external/jquery.core/jquery-1.11.0.min.js"></script>
+        <script src="./common.js"></script>
+        <script>
+
+            output("p81");
+
+
+            function remberStar(atom, list) {
+                if (isnull(list)) {
+                    return [];
+                } else if (!isatom(car(list))) {
+                    return cons(remberStar(atom, car(list)), remberStar(atom, cdr(list)));
+                } else if (iseqan(atom, car(list))) {
+                    return remberStar(atom, cdr(list));
+                } else {
+                    return cons(car(list), remberStar(atom, cdr(list)));
+                }
+            }
+            remberStar.arity = 2;
+
+            assert([ remberStar, "cup", [ [ "coffee" ], "cup", [ [ "tea" ], "cup" ], [ "and", [ "hick" ] ], "cup" ] ], [ [ [ "coffee" ], [ [ "tea" ] ], [ "and", [ "hick" ] ] ] ]);
+
+            assert([ remberStar, "sauce", [ [ [ "tomato", "sauce" ] ], [ [ "bean" ], "sauce" ], [ "and", [ [ "flying" ] ], "sauce" ] ] ], [ [ [ [ "tomato" ] ], [ [ "bean" ] ], [ "and", [ [ "flying" ] ] ] ] ]);
+
+            output("p82");
+
+            function insertRStar(new_at, old_at, list) {
+                if (isnull(list)) {
+                    return [];
+                } else if (!isatom(car(list))) {
+                    return cons(insertRStar(new_at, old_at, car(list)), insertRStar(new_at, old_at, cdr(list)));
+                } else if (iseqan(old_at, car(list))) {
+                    return cons(old_at, cons(new_at, insertRStar(new_at, old_at, cdr(list))));
+                } else {
+                    return cons(car(list), insertRStar(new_at, old_at, cdr(list)));
+                }
+            }
+            insertRStar.arity = 3;
+
+            assert([ insertRStar, "roast", "chuck", [ [ "how", "much", [ "wood" ] ], "could", [ [ "a", [ "wood" ], "chuck" ] ], [ [ [ "chuck" ] ] ], [ "if", [ "a" ], [ [ "wood", "chuck" ] ] ], "could", "chuck", "wood" ] ], [ [ [ "how", "much", [ "wood" ] ], "could", [ [ "a", [ "wood" ], "chuck", "roast" ] ], [ [ [ "chuck", "roast" ] ] ], [ "if", [ "a" ], [ [ "wood", "chuck", "roast" ] ] ], "could", "chuck", "roast", "wood" ] ]);
+
+            output("p85");
+
+            function occurStar(atom, list) {
+                if (isnull(list)) {
+                    return 0;
+                } else if (!isatom(car(list))) {
+                    // maximum call stack size exceeded!
+                    // return plus(occurStar(atom, car(list)), occurStar(atom, cdr(list)));
+                    return occurStar(atom, car(list)) + occurStar(atom, cdr(list));
+                } else if (iseqan(atom, car(list))) {
+                    return occurStar(atom, cdr(list)) + 1;
+                } else {
+                    return occurStar(atom, cdr(list));
+                }
+            }
+            occurStar.arity = 2;
+
+            assert([ occurStar, "banana", [ [ "banana" ], [ "split", [ [ [ [ "banana", "ice" ] ] ], [ "cream", [ "banana" ] ], "sherbet" ] ], [ "banana" ], [ "bread" ], [ "banana", "brandy" ] ] ], [ 5 ]);
+
+            function substStar(new_at, old_at, list) {
+                if (isnull(list)) {
+                    return [];
+                } else if (!isatom(car(list))) {
+                    return cons(substStar(new_at, old_at, car(list)), substStar(new_at, old_at, cdr(list)));
+                } else if (iseqan(old_at, car(list))) {
+                    return cons(new_at, substStar(new_at, old_at, cdr(list)));
+                } else {
+                    return cons(car(list), substStar(new_at, old_at, cdr(list)));
+                }
+            }
+            substStar.arity = 3;
+
+            assert([ substStar, "orange", "banana", [ [ "banana" ], [ "split", [ [ [ [ "banana", "ice" ] ] ], [ "cream", [ "banana" ] ], "sherbet" ] ], [ "banana" ], [ "bread" ], [ "banana", "brandy" ] ] ], [ [ [ "orange" ], [ "split", [ [ [ [ "orange", "ice" ] ] ], [ "cream", [ "orange" ] ], "sherbet" ] ], [ "orange" ], [ "bread" ], [ "orange", "brandy" ] ] ]);
+
+            function insertLStar(new_at, old_at, list) {
+                if (isnull(list)) {
+                    return [];
+                } else if (!isatom(car(list))) {
+                    return cons(insertLStar(new_at, old_at, car(list)), insertLStar(new_at, old_at, cdr(list)));
+                } else if (iseqan(old_at, car(list))) {
+                    return cons(new_at, cons(old_at, insertLStar(new_at, old_at, cdr(list))));
+                } else {
+                    return cons(car(list), insertLStar(new_at, old_at, cdr(list)));
+                }
+            }
+            insertLStar.arity = 3;
+
+            assert([ insertLStar, "pecker", "chuck", [ [ "how", "much", [ "wood" ] ], "could", [ [ "a", [ "wood" ], "chuck" ] ], [ [ [ "chuck" ] ] ], [ "if", [ "a" ], [ [ "wood", "chuck" ] ] ], "could", "chuck", "wood" ] ], [ [ [ "how", "much", [ "wood" ] ], "could", [ [ "a", [ "wood" ], "pecker", "chuck" ] ], [ [ [ "pecker", "chuck" ] ] ], [ "if", [ "a" ], [ [ "wood", "pecker", "chuck" ] ] ], "could", "pecker", "chuck", "wood" ] ]);
+
+            output("p86");
+
+            function memberStar(atom, list) {
+                if (isnull(list)) {
+                    return false;
+                } else if (!isatom(car(list))) {
+                    return memberStar(atom, car(list)) || memberStar(atom, cdr(list));
+                } else {
+                    return iseqan(atom, car(list)) || memberStar(atom, cdr(list));
+                }
+            }
+            memberStar.arity = 2;
+
+            assert([ memberStar, "chips", [ [ "potato" ], [ "chips", [ [ "with" ], "fish" ], [ "chips" ] ] ] ], [ true ]);
+
+            output("p87");
+
+            function leftmost(list) {
+                if (isatom(car(list))) {
+                    return car(list);
+                } else {
+                    return leftmost(car(list));
+                }
+            }
+            leftmost.arity = 1;
+
+            assert([ leftmost, [ [ "potato" ], [ "chips", [ [ "with" ], "fish" ], [ "chips" ] ] ] ], [ "potato" ]);
+
+            assert([ leftmost, [ [ [ "hot" ], [ "tuna", [ "and" ] ] ], "cheese" ] ], [ "hot" ]);
+
+            output("p89");
+
+            function iseqlist(list1, list2) {
+                if (isnull(list1) && isnull(list2)) {
+                    return true;
+                } else if (isnull(list1) || isnull(list2)) {
+                    return false;
+                } else if (isatom(car(list1)) && isatom(car(list2))) {
+                    return  iseqan(car(list1), car(list2)) && iseqlist(cdr(list1), cdr(list2));
+                } else if (isatom(car(list1)) || isatom(car(list2))) {
+                    return false;
+                } else {
+                    return iseqlist(car(list1), car(list2)) && iseqlist(cdr(list1), cdr(list2));
+                }
+            }
+            iseqlist.arity = 2;
+
+
+            function isequal(s_expr1, s_expr2) {
+                if (isatom(s_expr1) && isatom(s_expr2)) {
+                    return iseqan(s_expr1, s_expr2);
+                } else if (isatom(s_expr1) || isatom(s_expr2)) {
+                    return false;
+                } else {
+                    return iseqlist(s_expr1, s_expr2);
+                }
+            }
+            isequal.arity = 2;
+
+
+            // re-write
+            function iseqlist(list1, list2) {
+                if (isnull(list1) && isnull(list2)) {
+                    return true;
+                } else if (isnull(list1) || isnull(list2)) {
+                    return false;
+                } else {
+                    return isequal(car(list1), car(list2)) && isequal(cdr(list1), cdr(list2));
+                }
+            }
+
+
+            assert([ iseqlist, [ "strawberry", "ice", "cream" ], [ "strawberry", "ice", "cream" ] ], [ true ]);
+
+            output("p90");
+
+            assert([ iseqlist, [ "strawberry", "ice", "cream" ], [ "strawberry", "cream", "ice" ] ], [ false ]);
+
+            assert([ iseqlist, [ "banana", [ [ "split" ] ] ], [ [ "banana" ], [ "split" ] ] ], [ false ]);
+
+            assert([ iseqlist, [ "beef", [ [ "sausage" ] ], [ "and", [ "soda" ] ] ], [ "beef", [ [ "salami" ] ], [ "and", [ "soda" ] ] ] ], [ false ]);
+
+            assert([ iseqlist, [ "beef", [ [ "sausage" ] ], [ "and", [ "soda" ] ] ], [ "beef", [ [ "sausage" ] ], [ "and", [ "soda" ] ] ] ], [ true ]);
+
+            assert([ iseqlist, [ [ "how", "much", [ "wood" ] ], "could", [ [ "a", [ "wood" ], "chuck" ] ], [ [ [ "chuck" ] ] ], [ "if", [ "a" ], [ [ "wood", "chuck" ] ] ], "could", "chuck", "wood" ], [ [ "how", "much", [ "wood" ] ], "could", [ [ "a", [ "wood" ], "chuck" ] ], [ [ [ "chuck" ] ] ], [ "if", [ "a" ], [ [ "wood", "chuck" ] ] ], "could", "chuck", "wood" ] ], [ true ]);
+
+            assert([ iseqlist, [ [ "how", "much", [ "wood" ] ], "could", [ [ "a", [ "wood" ], "chuck" ] ], [ [ [ "chuck" ] ] ], [ "if", [ "a" ], [ [ "wood", "chuck" ] ] ], "could", "chuck", "wood" ], [ [ "how", "much", [ "wood" ] ], "could", [ [ "a", [ "wood" ], "chuck" ] ], [ [ [ "chuck" ] ] ], [ "if", [ "a" ], [ [ "wood", "chuck" ] ] ], "could", "wood" ] ], [ false ]);
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Little JavaScripter - Chapter 1. Toys</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="author" content="Stephen Francis">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Baloo+Thambi|Work+Sans" />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <h1>Little JavaScripter - Chapter 7. Friends and Relations</h1>
+        <p><a href="index.html">Back to index</a></p>
+        <div class="app_dynamic">
+        </div>
+        <script src="../external/jquery.core/jquery-1.11.0.min.js"></script>
+        <script src="./common.js"></script>
+        <script>
+
+            output("p111");
+
+            function ismember(atom, lat) {
+                if (isnull(lat)) {
+                    return false;
+                } else {
+                    return (atom === car(lat)) || ismember(atom, cdr(lat));
+                }
+            }
+            ismember.arity = 2;
+
+            function isset(lat) {
+                if (isnull(lat)) {
+                    return true;
+                } else if (ismember(car(lat), cdr(lat))) {
+                    return false;
+                } else {
+                    return isset((cdr(lat)));
+                }
+            }
+            isset.arity = 1;
+
+            assert([ isset, [ "apple", "peaches", "apple", "plum" ] ], [ false ]);
+
+            assert([ isset, [ "apple", "peaches", "pears", "plum" ] ], [ true ]);
+
+            assert([ isset, [ "apple", 3, "pear", 4, 9, "apple", 3, 4 ] ], [ false ]);
+
+            output("p112");
+
+            function makeset(lat) {
+                if (isnull(lat)) {
+                    return [];
+                } else if (ismember(car(lat), cdr(lat))) {
+                    return makeset(cdr(lat));
+                } else {
+                    return cons(car(lat), makeset(cdr(lat)));
+                }
+            }
+            makeset.arity = 1;
+
+            assert([ makeset, [ "apple", "peach", "pear", "peach", "plum", "apple", "lemon", "peach" ] ], [ [ "pear", "plum", "apple", "lemon", "peach" ] ]);
+
+            function multirember(atom, lat) {
+                if (isnull(lat)) {
+                    return lat;
+                } else if (atom === car(lat)) {
+                    return multirember(atom, cdr(lat));
+                } else {
+                    return cons(car(lat), multirember(atom, cdr(lat)));
+                }
+            }
+            multirember.arity = 2;
+
+            function makeset2(lat) {
+                if (isnull(lat)) {
+                    return [];
+                } else {
+                    return cons(car(lat), makeset2(multirember(car(lat), cdr(lat))));
+                }
+            }
+            makeset2.arity = 1;
+
+            assert([ makeset2, [ "apple", "peach", "pear", "peach", "plum", "apple", "lemon", "peach" ] ], [ [ "apple", "peach", "pear", "plum", "lemon" ] ]);
+
+            output("p113");
+
+            function issubset(set1, set2) {
+                if (isnull(set1)) {
+                    return true;
+                } else if (ismember(car(set1), set2)) {
+                    return issubset(cdr(set1), set2);
+                } else {
+                    return false;
+                }
+            }
+            issubset.arity = 2;
+
+            assert([ issubset, [ 5, "chicken", "wings" ], [ 5, "hamburgers", 2, "pieces", "fried", "chicken", "and", "light", "duckling", "wings" ] ], [ true ]);
+
+            assert([ issubset, [ 4, "pounds", "of", "horseradish" ], [ "four", "pounds", "chicken", "and", 5, "ounces", "horseradish" ] ], [ false ]);
+
+            output("p114");
+
+            function iseqset(set1, set2) {
+                return issubset(set1, set2) && issubset(set2, set1);
+            }
+            iseqset.arity = 2;
+
+            assert([ iseqset, [ 6, "large", "chickens", "with", "wings" ], [ 6, "chickens", "with", "large", "wings" ] ], [ true ]);
+
+            output("p115");
+
+            function isintersect(set1, set2) {
+                if (isnull(set1)) {
+                    return false;
+                } else {
+                    return ismember(car(set1), set2) || isintersect(cdr(set1), set2);
+                }
+            }
+            isintersect.arity = 2;
+
+            assert([ isintersect, [ "stewed", "tomatoes", "and", "macaroni" ], [ "macaroni", "and", "cheese" ] ], [ true ]);
+
+            output("p116");
+
+            function intersect(set1, set2) {
+                if (isnull(set1)) {
+                    return [];
+                } else if (ismember(car(set1), set2)) {
+                    return cons(car(set1), intersect(cdr(set1), set2));
+                } else {
+                    return intersect(cdr(set1), set2);
+                }
+            }
+            intersect.arity = 2;
+
+            assert([ intersect, [ "stewed", "tomatoes", "and", "macaroni" ], [ "macaroni", "and", "cheese" ] ], [ [ "and", "macaroni" ] ]);
+
+            function union(set1, set2) {
+                if (isnull(set1)) {
+                    return set2;
+                } else if (ismember(car(set1), set2)) {
+                    return union(cdr(set1), set2);
+                } else {
+                    return cons(car(set1), union(cdr(set1), set2));
+                }
+            }
+            union.arity = 2;
+
+            assert([ union, [ "stewed", "tomatoes", "and", "macaroni" ], [ "macaroni", "and", "cheese" ] ], [ [ "stewed", "tomatoes", "macaroni", "and", "cheese" ] ]);
+
+        </script>
+    </body>
+</html>

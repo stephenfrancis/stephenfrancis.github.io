@@ -27,6 +27,18 @@
 
             assert([ isatom, 3.14159265 ], [ true ]);
 
+
+            function add1(num) {
+                return num + 1;
+            }
+            add1.arity = 1;
+
+
+            function sub1(num) {
+                return num - 1;
+            }
+            sub1.arity = 1;
+
             assert([ add1, 67 ], [ 68 ]);
 
             output("p60");
@@ -35,13 +47,41 @@
 
             assert([ iszero, 1492 ], [ false ]);
 
+            function plus(num1, num2) {
+                if (iszero(num1)) {
+                    return num2;
+                } else {
+                    return plus(sub1(num1), add1(num2));
+                }
+            }
+            plus.arity = 2;
+
             assert([ plus, 46, 12 ], [ 58 ]);
 
             output("p61");
 
+            function minus(num1, num2) {
+                if (iszero(num2)) {
+                    return num1;
+                } else {
+                    return minus(sub1(num1), sub1(num2));
+                }
+            }
+            minus.arity = 2;
+
             assert([ minus, 14, 3 ], [ 11 ]);
 
             output("p62");
+
+            function addtup(tup) {
+                if (isnull(tup)) {
+                    return 0;
+                } else {
+                    return plus(car(tup), addtup(cdr(tup)));
+                }
+
+            }
+            addtup.arity = 1;
 
             assert([ addtup, [ 3, 5, 2, 8 ] ], [ 18 ]);
 
@@ -49,11 +89,34 @@
 
             output("p64");
 
+            function multiply(num1, num2) {
+                if (iszero(num2)) {
+                    return 0;
+                } else {
+                    return plus(num1, multiply(num1, sub1(num2)));
+                }
+            }
+            multiply.arity = 2;
+
             assert([ multiply, 5, 3 ], [ 15 ]);
 
             assert([ multiply, 13, 4 ], [ 52 ]);
 
             output("p67");
+
+            function tupplus(tup1, tup2) {
+                if (isnull(tup1) && isnull(tup2)) {
+                    return [];
+                } else if (isnull(tup1)) {
+                    return tup2;
+                } else if (isnull(tup2)) {
+                    return tup1;
+                } else {
+                    return cons(plus(car(tup1), car(tup2)), tupplus(cdr(tup1), cdr(tup2)));
+                }
+
+            }
+            tupplus.arity = 2;
 
             assert([ tupplus, [ 3, 6, 9, 11, 4 ], [ 8, 5, 2, 0, 7 ] ], [ [ 11, 11, 11, 11, 11 ] ]);
 
@@ -65,6 +128,17 @@
 
             output("p71");
 
+            function greaterthan(num1, num2) {
+                if (iszero(num1)) {
+                    return false;
+                } else if (iszero(num2)) {
+                    return true;
+                } else {
+                    return greaterthan(sub1(num1), sub1(num2));
+                }
+            }
+            greaterthan.arity = 2;
+
             assert([ greaterthan, 12, 133 ], [ false ]);
 
             assert([ greaterthan, 120, 11 ], [ true ]);
@@ -73,11 +147,27 @@
 
             output("p73");
 
+            function lessthan(num1, num2) {
+                if (iszero(num2)) {
+                    return false;
+                } else if (iszero(num1)) {
+                    return true;
+                } else {
+                    return lessthan(sub1(num1), sub1(num2));
+                }
+            }
+            lessthan.arity = 2;
+
             assert([ lessthan, 4, 6 ], [ true ]);
 
             assert([ lessthan, 8, 3 ], [ false ]);
 
             assert([ lessthan, 6, 6 ], [ false ]);
+
+            function equals(num1, num2) {
+                return !greaterthan(num1, num2) && !lessthan(num1, num2);
+            }
+            equals.arity = 2;
 
             assert([ equals, 4, 6 ], [ false ]);
 
@@ -87,6 +177,15 @@
 
             output("p74");
 
+            function power(num1, num2) {
+                if (iszero(num2)) {
+                    return 1;
+                } else {
+                    return multiply(num1, power(num1, sub1(num2)));
+                }
+            }
+            power.arity = 2;
+
             assert([ power, 1, 1 ], [ 1 ]);
 
             assert([ power, 2, 3 ], [ 8 ]);
@@ -95,25 +194,98 @@
 
             output("p75");
 
+            function divide(num1, num2) {
+                if (lessthan(num1, num2)) {
+                    return 0;
+                } else {
+                    return add1(divide(minus(num1, num2), num2));
+                }
+            }
+            divide.arity = 2;
+
             assert([ divide, 15, 4 ], [ 3 ]);
 
             output("p76");
+
+            function lenlat(lat) {
+                if (isnull(lat)) {
+                    return 0;
+                } else {
+                    return add1(lenlat(cdr(lat)));
+                }
+            }
+            lenlat.arity = 1;
 
             assert([ lenlat, [ "hotdogs", "with", "mustard", "sauerkraut", "and", "pickles" ] ], [ 6 ]);
 
             assert([ lenlat, [ "ham", "and", "cheese", "on", "rye" ] ], [ 5 ]);
 
+            function pick(num, lat) {
+                if (isnull(lat)) {
+                    return "";
+                } else if (iszero(sub1(num))) {
+                    return car(lat);
+                } else {
+                    return pick(sub1(num), cdr(lat));
+                }
+            }
+            pick.arity = 2;
+
             assert([ pick, 4, [ "lasagna", "spaghetti", "ravioli", "macaroni", "meatball" ] ], [ "macaroni" ]);
+
+            function rempick(num, lat) {
+                if (isnull(lat)) {
+                    return [];
+                } else if (iszero(sub1(num))) {
+                    return cdr(lat);
+                } else {
+                    return cons(car(lat), rempick(sub1(num), cdr(lat)));
+                }
+            }
+            rempick.arity = 2;
 
             assert([ rempick, 3, [ "hotdogs", "with", "hot", "mustard" ] ], [ [ "hotdogs", "with", "mustard" ] ]);
 
             output("p77");
 
+            function nonums(lat) {
+                if (isnull(lat)) {
+                    return [];
+                } else if (isnumber(car(lat))) {
+                    return nonums(cdr(lat));
+                } else {
+                    return cons(car(lat), nonums(cdr(lat)));
+                }
+            }
+            nonums.arity = 1;
+
             assert([ nonums, [ 5, "pears", 6, "prunes", 9, "dates" ] ], [ [ "pears", "prunes", "dates" ] ]);
+
+            function allnums(lat) {
+                if (isnull(lat)) {
+                    return [];
+                } else if (isnumber(car(lat))) {
+                    return cons(car(lat), allnums(cdr(lat)));
+                } else {
+                    return allnums(cdr(lat));
+                }
+            }
+            allnums.arity = 1;
 
             assert([ allnums, [ 5, "pears", 6, "prunes", 9, "dates" ] ], [ [ 5, 6, 9 ] ]);
 
             output("p78");
+
+            function occur(a, lat) {
+                if (isnull(lat)) {
+                    return 0;
+                } else if (iseqan(a, car(lat))) {
+                    return add1(occur(a, cdr(lat)));
+                } else {
+                    return occur(a, cdr(lat));
+                }
+            }
+            occur.arity = 2;
 
             assert([ occur, "hotdogs", [ "hotdogs", "with", "hotdogs", "sauerkraut", "and", "more", "hotdogs" ] ], [ 3 ]);
 

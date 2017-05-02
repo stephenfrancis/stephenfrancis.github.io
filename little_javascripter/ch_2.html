@@ -42,6 +42,15 @@
 
             output("p22");
 
+            function ismember(atom, lat) {
+                if (isnull(lat)) {
+                    return false;
+                } else {
+                    return iseq(atom, car(lat)) || ismember(atom, cdr(lat));
+                }
+            }
+            ismember.arity = 2;
+
             assert([ ismember, "tea", [ "coffee", "tea", "or", "milk" ] ], [ true ]);
 
             assert([ ismember, "poached", [ "fried", "eggs", "and", "scrambled", "eggs" ] ], [ false ]);
