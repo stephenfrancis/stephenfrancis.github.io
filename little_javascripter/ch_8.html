@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Little JavaScripter - Chapter 8. Lambda the Ultimate</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="author" content="Stephen Francis">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Baloo+Thambi|Work+Sans" />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <h1>Little JavaScripter - Chapter 8. Lambda the Ultimate</h1>
+        <p><a href="index.html">Back to index</a></p>
+        <div class="app_dynamic">
+        </div>
+        <script src="../external/jquery.core/jquery-1.11.0.min.js"></script>
+        <script src="./common.js"></script>
+        <script>
+
+            output("p125");
+
+            function rember_f(test, atom, lat) {
+                if (isnull(lat)) {
+                    return lat;
+                } else if (this[test](atom, car(lat))) {
+                    return cdr(lat);
+                } else {
+                    return cons(car(lat), rember_f(test, atom, cdr(lat)));
+                }
+            }
+            rember_f.arity = 3;
+
+            assert([ rember_f, "iseqan", 5, [ 6, 2, 5, 3 ] ], [ [ 6, 2, 3 ] ]);
+
+            function isequal(s_expr1, s_expr2) {
+                if (isatom(s_expr1) && isatom(s_expr2)) {
+                    return iseqan(s_expr1, s_expr2);
+                } else if (isatom(s_expr1) || isatom(s_expr2)) {
+                    return false;
+                } else {
+                    return iseqlist(s_expr1, s_expr2);
+                }
+            }
+            isequal.arity = 2;
+
+
+            // re-write
+            function iseqlist(list1, list2) {
+                if (isnull(list1) && isnull(list2)) {
+                    return true;
+                } else if (isnull(list1) || isnull(list2)) {
+                    return false;
+                } else {
+                    return isequal(car(list1), car(list2)) && isequal(cdr(list1), cdr(list2));
+                }
+            }
+
+            assert([ rember_f, "isequal", [ "pop", "corn" ], [ "lemonade", [ "pop", "corn" ], "and", [ "cake" ] ] ], [ [ "lemonade", "and", [ "cake" ] ] ]);
+
+            output("p127");
+
+            function iseq_curry(a) {
+                return function (x) {
+                    return iseq(a, x);
+                }
+            }
+            iseq_curry.arity = 1;
+
+            iseq_salad = iseq_curry("salad");
+            iseq_salad.arity = 1;
+
+            assert([ iseq_salad, "salad"], [ true ]);
+
+            assert([ iseq_salad, "tuna"], [ false ]);
+
+            function rember_curry(test) {
+                function f (atom, lat) {
+                    if (isnull(lat)) {
+                        return lat;
+                    } else if (test(atom, car(lat))) {
+                        return cdr(lat);
+                    } else {
+                        return cons(car(lat), f(atom, cdr(lat)));
+                    }
+                }
+                f.arity = 2;
+                return f;
+            }
+            rember_curry.arity = 1;
+
+            rember_iseqan = rember_curry(iseqan);
+
+            assert([ rember_iseqan, 5, [ 6, 2, 5, 3 ] ], [ [ 6, 2, 3 ] ]);
+
+        </script>
+    </body>
+</html>

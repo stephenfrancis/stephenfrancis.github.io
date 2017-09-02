@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Little JavaScripter - Chapter 1. Toys</title>
+        <title>Little JavaScripter - Chapter 7. Friends and Relations</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -150,6 +150,86 @@
             union.arity = 2;
 
             assert([ union, [ "stewed", "tomatoes", "and", "macaroni" ], [ "macaroni", "and", "cheese" ] ], [ [ "stewed", "tomatoes", "macaroni", "and", "cheese" ] ]);
+
+            output("p117");
+
+            function intersectall(lset) {
+                if (isnull(cdr(lset))) {
+                    return car(lset);
+                } else {
+                    return intersect(car(lset), intersectall(cdr(lset)));
+                }
+            }
+            intersectall.arity = 1;
+
+            assert([ intersectall, [ [ "a", "b", "c" ], [ "c", "a", "d", "e" ], [ "e", "f", "g", "h", "a", "b" ] ] ], [ [ "a" ] ]);
+
+            assert([ intersectall, [ [ 6, "pears", "and" ], [ 3, "peaches", "and", 6, "peppers" ], [ 8, "pears", "and", 6, "plums" ], [ "and", 6, "prunes", "with", "some", "apples" ] ] ], [ [ 6, "and" ] ]);
+
+            output("p118");
+
+            function ispair(arg) {
+                return (Array.isArray(arg) && arg.length === 2);
+            }
+
+            ispair.arity = 1;
+
+            function first(pair) {
+                return car(pair);
+            }
+            first.arity = 1;
+
+            function second(pair) {
+                return car(cdr(pair));
+            }
+            second.arity = 1;
+
+            function build(s1, s2) {
+                return cons(s1, cons(s2, []));
+            }
+            build.arity = 2;
+
+            function firsts(list) {
+                if (isnull(list)) {
+                    return list;
+                } else {
+                    return cons(car(car(list)), firsts(cdr(list)));
+                }
+            }
+            firsts.arity = 1;
+
+            function isfun(rel) {
+                return isset(firsts(rel));
+            }
+            isfun.arity = 1;
+
+            assert([ isfun, [ [ 4, 3 ], [ 4, 2 ], [ 7, 6 ], [ 6, 2 ], [ 3, 4 ] ] ], [ false ]);
+
+            assert([ isfun, [ [ 8, 3 ], [ 4, 2 ], [ 7, 6 ], [ 6, 2 ], [ 3, 4 ] ] ], [ true ]);
+
+            assert([ isfun, [ [ "d", 4 ], [ "b", 0 ], [ "b", 9 ], [ "e", 5 ], [ "g", 4 ] ] ], [ false ]);
+
+            function revrel(rel) {
+                if (isnull(rel)) {
+                    return [];
+                } else {
+                    return cons(build(second(car(rel)), first(car(rel))), revrel(cdr(rel)));
+                }
+            }
+            revrel.arity = 1;
+
+            assert([ revrel, [ [ 8, "a" ], [ "pumpkin", "pie" ], [ "got", "sick" ] ] ], [ [ [ "a", 8 ], [ "pie", "pumpkin" ], [ "sick", "got" ] ] ]);
+
+            function isfullfun(rel) {
+                return isfun(rel) && isfun(revrel(rel));
+            }
+            isfullfun.arity = 1;
+
+            assert([ isfullfun, [ [ 8, 3 ], [ 4, 8 ], [ 7, 6 ], [ 6, 2 ], [ 3, 4] ] ], [ true ]);
+
+            assert([ isfullfun, [ [ "grape", "raisin" ], [ "plum", "prune" ], [ "stewed", "prune" ] ] ], [ false ]);
+
+            assert([ isfullfun, [ [ "grape", "raisin" ], [ "plum", "prune" ], [ "stewed", "grape" ] ] ], [ true ]);
 
         </script>
     </body>
