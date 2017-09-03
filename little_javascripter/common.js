@@ -24,7 +24,8 @@ function doList(list) {
         if (Array.isArray(out[i])) {
             out[i] = doList(out[i]);
         }
-        if (typeof out[i] === "function") {
+        // replaced 'if' with 'while' in next to allow for function returning another function
+        while (typeof out[i] === "function") {
             doListAuto(out, i);
         }
     }
@@ -37,8 +38,6 @@ function doListAuto(list, i) {
     var resp;
     if (typeof list[i] === "function" && typeof list[i].arity === "number") {
         funct = list[i];
-    // } else if (typeof this[list[i]] === "function" && typeof this[list[i]].arity === "number") {
-    //     funct = this[list[i]];
     } else {
         throw "term is not a function with a defined arity: " + list + " at position " + i;
     }

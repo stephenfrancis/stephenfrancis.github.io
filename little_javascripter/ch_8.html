@@ -79,7 +79,7 @@
                 function f (atom, lat) {
                     if (isnull(lat)) {
                         return lat;
-                    } else if (test(atom, car(lat))) {
+                    } else if (this[test](atom, car(lat))) {
                         return cdr(lat);
                     } else {
                         return cons(car(lat), f(atom, cdr(lat)));
@@ -90,9 +90,155 @@
             }
             rember_curry.arity = 1;
 
-            rember_iseqan = rember_curry(iseqan);
+            rember_iseqan = rember_curry("iseqan");
 
             assert([ rember_iseqan, 5, [ 6, 2, 5, 3 ] ], [ [ 6, 2, 3 ] ]);
+
+            output("p129");
+
+            rember_iseq = rember_curry("iseq");
+
+            assert([ rember_iseq, "tuna", [ "tuna", "salad", "is", "good" ] ], [ [ "salad", "is", "good" ] ]);
+
+            assert([ rember_curry, "iseq", "tuna", [ "shrimp", "salad", "and", "tuna", "salad" ] ], [ [ "shrimp", "salad", "and", "salad" ] ]);
+
+            output("p130");
+
+            function insertL_curry(test) {
+                function f (new_at, old_at, lat) {
+                    if (isnull(lat)) {
+                        return lat;
+                    } else if (this[test](old_at, car(lat))) {
+                        return cons(new_at, lat);
+                    } else {
+                        return cons(car(lat), f(new_at, old_at, cdr(lat)));
+                    }
+                }
+                f.arity = 3;
+                return f;
+            }
+            insertL_curry.arity = 1;
+
+            assert([ insertL_curry, "iseq", "e", "d", [ "a", "b", "c", "d", "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "e", "d", "f", "g", "d", "h" ] ]);
+
+
+            function insertR_curry(test) {
+                function f (new_at, old_at, lat) {
+                    if (isnull(lat)) {
+                        return lat;
+                    } else if (this[test](old_at, car(lat))) {
+                        return cons(old_at, cons(new_at, cdr(lat)));
+                    } else {
+                        return cons(car(lat), f(new_at, old_at, cdr(lat)));
+                    }
+                }
+                f.arity = 3;
+                return f;
+            }
+            insertR_curry.arity = 1;
+
+            assert([ insertR_curry, "iseq", "e", "d", [ "a", "b", "c", "d", "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "d", "e", "f", "g", "d", "h" ] ]);
+
+
+            output("p131");
+
+            function insert_g(test, transform) {
+                function f (new_at, old_at, lat) {
+                    if (isnull(lat)) {
+                        return lat;
+                    } else if (this[test](old_at, car(lat))) {
+                        return this[transform](old_at, new_at, lat);
+                    } else {
+                        return cons(car(lat), f(new_at, old_at, cdr(lat)));
+                    }
+                }
+                f.arity = 3;
+                return f;
+            }
+            insert_g.arity = 2;
+
+            function insertL_transform(old_at, new_at, lat) {
+                return cons(new_at, lat);
+            }
+
+            assert([ insert_g, "iseq", "insertL_transform", "e", "d", [ "a", "b", "c", "d", "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "e", "d", "f", "g", "d", "h" ] ]);
+
+            function insertR_transform(old_at, new_at, lat) {
+                return cons(old_at, cons(new_at, cdr(lat)));
+            }
+
+            assert([ insert_g, "iseq", "insertR_transform", "e", "d", [ "a", "b", "c", "d", "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "d", "e", "f", "g", "d", "h" ] ]);
+
+
+            output("p133");
+
+            function subst_transform(old_at, new_at, lat) {
+                return cons(new_at, cdr(lat));
+            }
+
+            assert([ insert_g, "iseq", "subst_transform", "e", "d", [ "a", "b", "c", "d", "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "e", "f", "g", "d", "h" ] ]);
+
+            output("p134");
+
+            function plus(num1, num2) {
+                return num1 + num2;
+            }
+            plus.arity = 2;
+
+            function multiply(num1, num2) {
+                return num1 * num2;
+            }
+            multiply.arity = 2;
+
+            function power(num1, num2) {
+                return Math.pow(num1, num2);
+            }
+            power.arity = 2;
+
+            function atom_to_function(at) {
+                if (at === "+") {
+                    return plus;
+                } else if (at === "x") {
+                    return multiply;
+                } else {
+                    return power;
+                }
+            }
+            atom_to_function.arity = 1;
+
+            output("p135");
+
+            assert([ atom_to_function, "+", 5, 3 ], [ 8 ]);
+
+            function value(aexp) {
+                if (isatom(aexp)) {
+                    return aexp;
+                } else {
+                    return atom_to_function(car(cdr(aexp)))(value(car(aexp)), value(car(cdr(cdr(aexp)))));
+                }
+            }
+            value.arity = 1;
+
+            assert([ value, 13 ], [ 13 ]);
+
+            assert([ value, [ 1, "+", 3 ] ], [ 4 ]);
+
+            assert([ value, [ 2, "x", 3 ] ], [ 6 ]);
+
+            assert([ value, [ 2, "^", 3 ] ], [ 8 ]);
+
+            assert([ value, [ 1, "+", [ 3, "^", 4 ] ] ], [ 82 ]);
+
+            function multirember_f(test, atom, lat) {
+                if (isnull(lat)) {
+                    return lat;
+                } else if (this[test](atom, car(lat))) {
+                    return multirember_f(test, atom, cdr(lat));
+                } else {
+                    return cons(car(lat), multirember_f(test, atom, cdr(lat)));
+                }
+            }
+            multirember_f.arity = 3;
 
         </script>
     </body>
