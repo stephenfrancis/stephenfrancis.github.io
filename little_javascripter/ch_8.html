@@ -240,6 +240,71 @@
             }
             multirember_f.arity = 3;
 
+            assert([ multirember_f, "iseq", "tuna", [ "shrimp", "salad", "tuna", "salad", "and", "tuna" ] ], [ [ "shrimp", "salad", "salad", "and" ] ]);
+
+            output("p136");
+
+            function multirember_eq(atom, lat) {
+                return multirember_f("iseq", atom, lat);
+            }
+            multirember_eq.arity = 2;
+
+            assert([ multirember_eq, "tuna", [ "shrimp", "salad", "tuna", "salad", "and", "tuna" ] ], [ [ "shrimp", "salad", "salad", "and" ] ]);
+
+            function multirember_test(test, lat) {
+                if (isnull(lat)) {
+                    return lat;
+                } else if (this[test](lat)) {
+                    return multirember_test(test, cdr(lat));
+                } else {
+                    return cons(car(lat), multirember_test(test, cdr(lat)));
+                }
+            }
+            multirember_test.arity = 2;
+
+            function iseq_tuna(lat) {
+                return iseq("tuna", car(lat));
+            }
+            iseq_tuna.arity = 1;
+
+            assert([ multirember_test, "iseq_tuna", [ "shrimp", "salad", "tuna", "salad", "and", "tuna" ] ], [ [ "shrimp", "salad", "salad", "and" ] ]);
+
+
+            var that = this;
+
+            function multirember_and_co(a, lat, col) {
+                if (typeof col === "string") {
+                    col = that[col];
+                }
+                if (isnull(lat)) {
+                    console.log("col: " + col);
+                    return col([], []);
+                } else if (iseq(car(lat), a)) {
+                    console.log("iseq in " + lat.length);
+                    return multirember_and_co(a, cdr(lat), function(newlat, seen) {
+                        console.log("iseq out " + lat.length);
+                        return col(newlat, cons(car(lat), seen));
+                    });
+                } else {
+                    console.log("not iseq in " + lat.length);
+                    return multirember_and_co(a, cdr(lat), function(newlat, seen) {
+                        console.log("not iseq out " + lat.length);
+                        return col(cons(car(lat), newlat), seen);
+                    });
+                }
+            }
+            multirember_and_co.arity = 3;
+
+            function a_friend(x, y) {
+                return x;
+                // return isnull(y);
+                // return "x: " + JSON.stringify(x) + ", y: " + JSON.stringify(y);
+            }
+            a_friend.arity = 2;
+
+            assert([ multirember_and_co, "tuna", [ "strawberries", "tuna", "and", "swordfish" ], "a_friend" ], [ [ "strawberries", "and", "swordfish" ] ]);
+
+            // console.log(multirember_and_co("tuna", [ "strawberries", "tuna", "and", "swordfish" ], a_friend));
         </script>
     </body>
 </html>
