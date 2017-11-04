@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Little JavaScripter - Test Cases - JavaScript to Lisp Conversion</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="author" content="Stephen Francis">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Baloo+Thambi|Work+Sans" />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <h1>Little JavaScripter - Test Cases - JavaScript to Lisp Conversion</h1>
+        <p><a href="index.html">Back to index</a></p>
+        <div>
+            <h2>List Processing</h2>
+            A <i>list</i> is a JavaScript array.
+            <ul>
+                <li><b>assert</b>(<i>list</i>, expected)</li>
+                <ul>
+                    <li><b>doList</b>(<i>list</i>) - processes list in reverse, for each:</li>
+                    <ul>
+                        <li>if item is an array: item = doList(<i>item</i>)</li>
+                        <li>then if item is a function:</li>
+                        <ul>
+                            <li>item = <b>doListAuto</b>(<i>list</i>, i) - execute the ith item of
+                                <i>list</i> as a function consuming the following j items as arguments
+                                where j is the <i>arity</i> of the function</li>
+                        </ul>
+                    </ul>
+                </ul>
+            </ul>
+        </div>
+        <div class="app_dynamic">
+        </div>
+        <script src="../external/jquery.core/jquery-1.11.0.min.js"></script>
+        <script src="./common.js"></script>
+        <script>
+            var l1;
+
+            function concat(a, b) {
+                return a + " + " + b;
+            }
+            concat.arity = 2;
+
+            assert([ concat, "hotdog", "ketchup" ], [ "hotdog + ketchup" ]);
+
+            assert([ concat, "lemonade", concat, "hotdog", "ketchup" ], [ "lemonade + hotdog + ketchup" ]);
+
+            assert([ concat, concat, "lemonade", "hotdog", "ketchup" ], [ "lemonade + hotdog + ketchup" ]);
+
+        </script>
+    </body>
+</html>

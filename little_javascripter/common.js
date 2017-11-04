@@ -25,7 +25,7 @@ function doList(list) {
             out[i] = doList(out[i]);
         }
         // replaced 'if' with 'while' in next to allow for function returning another function
-        while (typeof out[i] === "function") {
+        while (isItemExecutable(out, i)) {
             doListAuto(out, i);
         }
     }
@@ -33,31 +33,40 @@ function doList(list) {
     return out;
 }
 
+function isItemExecutable(list, i) {
+    return ((typeof list[i] === "function")
+        && (typeof list[i].arity === "number")
+        && (list.length >= (i + list[i].arity + 1)));
+}
+
 function doListAuto(list, i) {
-    var funct = this[list[i]];
+    var funct = list[i];
     var resp;
-    if (typeof list[i] === "function" && typeof list[i].arity === "number") {
-        funct = list[i];
-    } else {
-        throw "term is not a function with a defined arity: " + list + " at position " + i;
+    var args;
+    if (typeof funct !== "function" || typeof funct.arity !== "number") {
+        throw "term is not a function with a defined arity: " + list
+            + " at position " + i;
     }
     if (list.length < (i + funct.arity + 1)) {
-        throw "insufficient remaining terms in list: " + list + " at term " + i + " for arity " + funct.arity;
+        throw "insufficient remaining terms in list: " + list + " at term "
+            + i + " for arity " + funct.arity;
     }
-    if (funct.arity > 4) {
-        throw "can only support arity up to 4";
-    }
-    if (funct.arity === 0) {
-        resp = funct();
-    } else if (funct.arity === 1) {
-        resp = funct(list[i + 1]);
-    } else if (funct.arity === 2) {
-        resp = funct(list[i + 1], list[i + 2]);
-    } else if (funct.arity === 3) {
-        resp = funct(list[i + 1], list[i + 2], list[i + 3]);
-    } else if (funct.arity === 4) {
-        resp = funct(list[i + 1], list[i + 2], list[i + 3], list[i + 4]);
-    }
+    args = list.slice(i + 1, i + 1 + funct.arity);
+    resp = funct.apply(null, args);
+    // if (funct.arity > 4) {
+    //     throw "can only support arity up to 4";
+    // }
+    // if (funct.arity === 0) {
+    //     resp = funct();
+    // } else if (funct.arity === 1) {
+    //     resp = funct(list[i + 1]);
+    // } else if (funct.arity === 2) {
+    //     resp = funct(list[i + 1], list[i + 2]);
+    // } else if (funct.arity === 3) {
+    //     resp = funct(list[i + 1], list[i + 2], list[i + 3]);
+    // } else if (funct.arity === 4) {
+    //     resp = funct(list[i + 1], list[i + 2], list[i + 3], list[i + 4]);
+    // }
     list.splice(i, (funct.arity + 1), resp);
 }
 
@@ -234,5 +243,3 @@ function and(a, b) {
     return a && b;
 }
 and.arity = 2;
-
-
