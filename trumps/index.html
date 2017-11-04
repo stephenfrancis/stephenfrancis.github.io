@@ -7,7 +7,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="description" content="Play trumps!">
 		<meta name="author" content="Stephen Francis">
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<link rel="stylesheet" type="text/css" href="../external/bootstrap-2.3.1/css/bootstrap.min.css" media="screen" />
 		<link rel="stylesheet" type="text/css" href="../external/bootstrap-2.3.1/css/bootstrap-responsive.min.css" />
@@ -21,8 +21,10 @@
 				padding: 20px;
 				margin-top: 10px;
 			}
-			.card td 				{ font-weight: bold; cursor: pointer; padding: 5px; }
-			#message						{ padding: 20px; }
+			.active .card tr:hover	{ background-color: lightgreen; }
+			.card td 				{ font-weight: bold; padding: 5px; }
+			.active .card td 		{ cursor: pointer; }
+			#message				{ padding: 20px; }
 		</style>
 	</head>
 	<body>
@@ -109,7 +111,7 @@
 				o.player_up = "A";
 				turn();
 			};
-			
+
 			function shuffle() {
 				var i,
 					card;
@@ -129,7 +131,7 @@
 					o.hand[i % 2 === 0 ? "A" : "B"].push(o.cards[i]);
 				}
 			};
-			
+
 			function turn() {
 				if (o.hand.A.length === 0) {
 					alert("Player B wins!");
@@ -145,10 +147,11 @@
 					populateCard(o.player_up);
 				}
 			};
- 
+
 			function clearCard(player) {
 				var i;
 				$("div#player" + player + " > .card #title").text("?");
+				$("div#player" + player).removeClass("active");
 				for (i = 1; i < o.categories.length; i += 1) {
 					$("div#player" + player + " > .card #val"  + i).text("?");
 				}
@@ -159,6 +162,7 @@
 					card = o.hand[player][0];
 //				$("div#player" + player).css("border", "1px solid green");
 				$("div#player" + player + " > .card #title").text(card[0]);
+				$("div#player" + player).addClass("active");
 				for (i = 1; i < o.categories.length; i += 1) {
 					$("div#player" + player + " > .card #val"  + i).text(card[i]);
 				}
@@ -190,7 +194,7 @@
 					winsTurn("B", index);
 				}
 			}
-			
+
 			function winsTurn(player, index) {
 				var cardA = o.hand.A.shift(),
 					cardB = o.hand.B.shift();
@@ -200,7 +204,7 @@
 				o.player_up = player;
 				turn();
 			}
-				
+
 		</script>
 	</body>
 </html>

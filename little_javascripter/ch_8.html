@@ -19,292 +19,376 @@
         <script src="./common.js"></script>
         <script>
 
-            output("p125");
+output("p125");
 
-            function rember_f(test, atom, lat) {
-                if (isnull(lat)) {
-                    return lat;
-                } else if (this[test](atom, car(lat))) {
-                    return cdr(lat);
-                } else {
-                    return cons(car(lat), rember_f(test, atom, cdr(lat)));
-                }
+function rember_f(test, atom, lat) {
+    if (isnull(lat)) {
+        return lat;
+    } else if (this[test](atom, car(lat))) {
+        return cdr(lat);
+    } else {
+        return cons(car(lat), rember_f(test, atom, cdr(lat)));
+    }
+}
+rember_f.arity = 3;
+
+assert([ rember_f, "iseqan", 5, [ 6, 2, 5, 3 ] ], [ [ 6, 2, 3 ] ]);
+
+function isequal(s_expr1, s_expr2) {
+    if (isatom(s_expr1) && isatom(s_expr2)) {
+        return iseqan(s_expr1, s_expr2);
+    } else if (isatom(s_expr1) || isatom(s_expr2)) {
+        return false;
+    } else {
+        return iseqlist(s_expr1, s_expr2);
+    }
+}
+isequal.arity = 2;
+
+
+// re-write
+function iseqlist(list1, list2) {
+    if (isnull(list1) && isnull(list2)) {
+        return true;
+    } else if (isnull(list1) || isnull(list2)) {
+        return false;
+    } else {
+        return isequal(car(list1), car(list2)) && isequal(cdr(list1), cdr(list2));
+    }
+}
+
+assert([ rember_f, "isequal", [ "pop", "corn" ], [ "lemonade", [ "pop", "corn" ],
+    "and", [ "cake" ] ] ], [ [ "lemonade", "and", [ "cake" ] ] ]);
+
+output("p127");
+
+function iseq_curry(a) {
+    return function (x) {
+        return iseq(a, x);
+    }
+}
+iseq_curry.arity = 1;
+
+iseq_salad = iseq_curry("salad");
+iseq_salad.arity = 1;
+
+assert([ iseq_salad, "salad"], [ true ]);
+
+assert([ iseq_salad, "tuna"], [ false ]);
+
+function rember_curry(test) {
+    function f (atom, lat) {
+        if (isnull(lat)) {
+            return lat;
+        } else if (this[test](atom, car(lat))) {
+            return cdr(lat);
+        } else {
+            return cons(car(lat), f(atom, cdr(lat)));
+        }
+    }
+    f.arity = 2;
+    return f;
+}
+rember_curry.arity = 1;
+
+rember_iseqan = rember_curry("iseqan");
+
+assert([ rember_iseqan, 5, [ 6, 2, 5, 3 ] ], [ [ 6, 2, 3 ] ]);
+
+output("p129");
+
+rember_iseq = rember_curry("iseq");
+
+assert([ rember_iseq, "tuna", [ "tuna", "salad", "is", "good" ] ],
+    [ [ "salad", "is", "good" ] ]);
+
+assert([ rember_curry, "iseq", "tuna", [ "shrimp", "salad", "and", "tuna",
+    "salad" ] ], [ [ "shrimp", "salad", "and", "salad" ] ]);
+
+output("p130");
+
+function insertL_curry(test) {
+    function f (new_at, old_at, lat) {
+        if (isnull(lat)) {
+            return lat;
+        } else if (this[test](old_at, car(lat))) {
+            return cons(new_at, lat);
+        } else {
+            return cons(car(lat), f(new_at, old_at, cdr(lat)));
+        }
+    }
+    f.arity = 3;
+    return f;
+}
+insertL_curry.arity = 1;
+
+assert([ insertL_curry, "iseq", "e", "d", [ "a", "b", "c", "d", "f", "g", "d",
+    "h" ] ], [ [ "a", "b", "c", "e", "d", "f", "g", "d", "h" ] ]);
+
+
+function insertR_curry(test) {
+    function f (new_at, old_at, lat) {
+        if (isnull(lat)) {
+            return lat;
+        } else if (this[test](old_at, car(lat))) {
+            return cons(old_at, cons(new_at, cdr(lat)));
+        } else {
+            return cons(car(lat), f(new_at, old_at, cdr(lat)));
+        }
+    }
+    f.arity = 3;
+    return f;
+}
+insertR_curry.arity = 1;
+
+assert([ insertR_curry, "iseq", "e", "d", [ "a", "b", "c", "d", "f", "g", "d",
+    "h" ] ], [ [ "a", "b", "c", "d", "e", "f", "g", "d", "h" ] ]);
+
+
+output("p131");
+
+function insert_g(test, transform) {
+    function f (new_at, old_at, lat) {
+        if (isnull(lat)) {
+            return lat;
+        } else if (this[test](old_at, car(lat))) {
+            return this[transform](old_at, new_at, lat);
+        } else {
+            return cons(car(lat), f(new_at, old_at, cdr(lat)));
+        }
+    }
+    f.arity = 3;
+    return f;
+}
+insert_g.arity = 2;
+
+function insertL_transform(old_at, new_at, lat) {
+    return cons(new_at, lat);
+}
+
+assert([ insert_g, "iseq", "insertL_transform", "e", "d", [ "a", "b", "c", "d",
+    "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "e", "d", "f", "g", "d", "h" ] ]);
+
+function insertR_transform(old_at, new_at, lat) {
+    return cons(old_at, cons(new_at, cdr(lat)));
+}
+
+assert([ insert_g, "iseq", "insertR_transform", "e", "d", [ "a", "b", "c", "d",
+    "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "d", "e", "f", "g", "d", "h" ] ]);
+
+
+output("p133");
+
+function subst_transform(old_at, new_at, lat) {
+    return cons(new_at, cdr(lat));
+}
+
+assert([ insert_g, "iseq", "subst_transform", "e", "d", [ "a", "b", "c", "d",
+    "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "e", "f", "g", "d", "h" ] ]);
+
+output("p134");
+
+function plus(num1, num2) {
+    return num1 + num2;
+}
+plus.arity = 2;
+
+function multiply(num1, num2) {
+    return num1 * num2;
+}
+multiply.arity = 2;
+
+function power(num1, num2) {
+    return Math.pow(num1, num2);
+}
+power.arity = 2;
+
+function atom_to_function(at) {
+    if (at === "+") {
+        return plus;
+    } else if (at === "x") {
+        return multiply;
+    } else {
+        return power;
+    }
+}
+atom_to_function.arity = 1;
+
+output("p135");
+
+assert([ atom_to_function, "+", 5, 3 ], [ 8 ]);
+
+function value(aexp) {
+    if (isatom(aexp)) {
+        return aexp;
+    } else {
+        return atom_to_function(car(cdr(aexp)))(value(car(aexp)),
+            value(car(cdr(cdr(aexp)))));
+    }
+}
+value.arity = 1;
+
+assert([ value, 13 ], [ 13 ]);
+
+assert([ value, [ 1, "+", 3 ] ], [ 4 ]);
+
+assert([ value, [ 2, "x", 3 ] ], [ 6 ]);
+
+assert([ value, [ 2, "^", 3 ] ], [ 8 ]);
+
+assert([ value, [ 1, "+", [ 3, "^", 4 ] ] ], [ 82 ]);
+
+function multirember_f(test, atom, lat) {
+    if (isnull(lat)) {
+        return lat;
+    } else if (this[test](atom, car(lat))) {
+        return multirember_f(test, atom, cdr(lat));
+    } else {
+        return cons(car(lat), multirember_f(test, atom, cdr(lat)));
+    }
+}
+multirember_f.arity = 3;
+
+assert([ multirember_f, "iseq", "tuna", [ "shrimp", "salad", "tuna", "salad",
+    "and", "tuna" ] ], [ [ "shrimp", "salad", "salad", "and" ] ]);
+
+output("p136");
+
+function multirember_eq(atom, lat) {
+    return multirember_f("iseq", atom, lat);
+}
+multirember_eq.arity = 2;
+
+assert([ multirember_eq, "tuna", [ "shrimp", "salad", "tuna", "salad", "and",
+    "tuna" ] ], [ [ "shrimp", "salad", "salad", "and" ] ]);
+
+function multirember_test(test, lat) {
+    if (isnull(lat)) {
+        return lat;
+    } else if (this[test](lat)) {
+        return multirember_test(test, cdr(lat));
+    } else {
+        return cons(car(lat), multirember_test(test, cdr(lat)));
+    }
+}
+multirember_test.arity = 2;
+
+function iseq_tuna(lat) {
+    return iseq("tuna", car(lat));
+}
+iseq_tuna.arity = 1;
+
+assert([ multirember_test, "iseq_tuna", [ "shrimp", "salad", "tuna", "salad",
+    "and", "tuna" ] ], [ [ "shrimp", "salad", "salad", "and" ] ]);
+
+
+function multirember_and_co(a, lat, col) {
+    // if (typeof col === "string") {
+    //     col = that[col];
+    // }
+    if (isnull(lat)) {
+        console.log("col: " + col);
+        return col([], []);
+    } else if (iseq(car(lat), a)) {
+        console.log("iseq in " + lat.length);
+        return multirember_and_co(a, cdr(lat), function(newlat, seen) {
+            console.log("iseq out " + lat.length);
+            return col(newlat, cons(car(lat), seen));
+        });
+    } else {
+        console.log("not iseq in " + lat.length);
+        return multirember_and_co(a, cdr(lat), function(newlat, seen) {
+            console.log("not iseq out " + lat.length);
+            return col(cons(car(lat), newlat), seen);
+        });
+    }
+}
+multirember_and_co.arity = 3;
+
+function a_friend(x, y) {
+    return x;
+    // return isnull(y);
+    // return "x: " + JSON.stringify(x) + ", y: " + JSON.stringify(y);
+}
+a_friend.arity = 2;
+
+// assert([ multirember_and_co, "tuna", [ "strawberries", "tuna", "and", "swordfish" ], "a_friend" ], [ [ "strawberries", "and", "swordfish" ] ]);
+
+assert([ multirember_and_co, "tuna", [ "strawberries", "tuna",
+        "and", "swordfish" ], a_friend ],
+    [ [ "strawberries", "and", "swordfish" ] ]);
+
+
+output("p140");
+
+function another_friend(newlat, seen) {
+    return [ newlat.length, seen.length ];
+}
+another_friend.arity = 2;
+
+assert([ multirember_and_co, "tuna", [ "strawberries", "tuna",
+        "and", "swordfish" ], another_friend ],
+    [ [ 3, 1 ] ]);
+
+
+
+output("p141");
+
+function multiinsertLR(new_at, oldL, oldR, lat) {
+    if (isnull(lat)) {
+        return lat;
+    } else if (iseq(oldL, car(lat))) {
+        return cons(new_at, cons(oldL,
+            multiinsertLR(new_at, oldL, oldR, cdr(lat))));
+    } else if (iseq(oldR, car(lat))) {
+        return cons(oldR, cons(new_at,
+            multiinsertLR(new_at, oldL, oldR, cdr(lat))));
+    } else {
+        return cons(car(lat),
+            multiinsertLR(new_at, oldL, oldR, cdr(lat)));
+    }
+}
+multiinsertLR.arity = 4;
+
+assert([ multiinsertLR, "jalapeno", "tamales", "salsa",
+    [ "tacos", "and", "tamales", "and", "salsa" ] ],
+    [ [ "tacos", "and", "jalapeno", "tamales", "and", "salsa", "jalapeno" ] ]);
+
+
+function colLR(newlat, numL, numR) {
+    return [ newlat, numL, numR ];
+}
+colLR.arity = 3;
+
+function multiinsertLR_and_co(new_at, oldL, oldR, lat, col) {
+    if (isnull(lat)) {
+        return col([], 0, 0);
+    } else if (iseq(oldL, car(lat))) {
+        return multiinsertLR_and_co(new_at, oldL, oldR, cdr(lat),
+            function (newlat, numL, numR) {
+                return col(cons(new_at, cons(oldL, newlat)), numL + 1, numR);
             }
-            rember_f.arity = 3;
-
-            assert([ rember_f, "iseqan", 5, [ 6, 2, 5, 3 ] ], [ [ 6, 2, 3 ] ]);
-
-            function isequal(s_expr1, s_expr2) {
-                if (isatom(s_expr1) && isatom(s_expr2)) {
-                    return iseqan(s_expr1, s_expr2);
-                } else if (isatom(s_expr1) || isatom(s_expr2)) {
-                    return false;
-                } else {
-                    return iseqlist(s_expr1, s_expr2);
-                }
+        );
+    } else if (iseq(oldR, car(lat))) {
+        return multiinsertLR_and_co(new_at, oldL, oldR, cdr(lat),
+            function (newlat, numL, numR) {
+                return col(cons(oldR, cons(new_at, newlat)), numL, numR + 1);
             }
-            isequal.arity = 2;
-
-
-            // re-write
-            function iseqlist(list1, list2) {
-                if (isnull(list1) && isnull(list2)) {
-                    return true;
-                } else if (isnull(list1) || isnull(list2)) {
-                    return false;
-                } else {
-                    return isequal(car(list1), car(list2)) && isequal(cdr(list1), cdr(list2));
-                }
+        );
+    } else {
+        return multiinsertLR_and_co(new_at, oldL, oldR, cdr(lat),
+            function (newlat, numL, numR) {
+                return col(cons(car(lat), newlat), numL, numR);
             }
+        );
+    }
+}
+multiinsertLR_and_co.arity = 5;
 
-            assert([ rember_f, "isequal", [ "pop", "corn" ], [ "lemonade", [ "pop", "corn" ], "and", [ "cake" ] ] ], [ [ "lemonade", "and", [ "cake" ] ] ]);
+assert([ multiinsertLR_and_co, "jalapeno", "tamales", "salsa",
+    [ "tacos", "and", "tamales", "and", "salsa" ], colLR ],
+    [ [ [ "tacos", "and", "jalapeno", "tamales", "and", "salsa", "jalapeno" ], 1, 1 ] ]);
 
-            output("p127");
-
-            function iseq_curry(a) {
-                return function (x) {
-                    return iseq(a, x);
-                }
-            }
-            iseq_curry.arity = 1;
-
-            iseq_salad = iseq_curry("salad");
-            iseq_salad.arity = 1;
-
-            assert([ iseq_salad, "salad"], [ true ]);
-
-            assert([ iseq_salad, "tuna"], [ false ]);
-
-            function rember_curry(test) {
-                function f (atom, lat) {
-                    if (isnull(lat)) {
-                        return lat;
-                    } else if (this[test](atom, car(lat))) {
-                        return cdr(lat);
-                    } else {
-                        return cons(car(lat), f(atom, cdr(lat)));
-                    }
-                }
-                f.arity = 2;
-                return f;
-            }
-            rember_curry.arity = 1;
-
-            rember_iseqan = rember_curry("iseqan");
-
-            assert([ rember_iseqan, 5, [ 6, 2, 5, 3 ] ], [ [ 6, 2, 3 ] ]);
-
-            output("p129");
-
-            rember_iseq = rember_curry("iseq");
-
-            assert([ rember_iseq, "tuna", [ "tuna", "salad", "is", "good" ] ], [ [ "salad", "is", "good" ] ]);
-
-            assert([ rember_curry, "iseq", "tuna", [ "shrimp", "salad", "and", "tuna", "salad" ] ], [ [ "shrimp", "salad", "and", "salad" ] ]);
-
-            output("p130");
-
-            function insertL_curry(test) {
-                function f (new_at, old_at, lat) {
-                    if (isnull(lat)) {
-                        return lat;
-                    } else if (this[test](old_at, car(lat))) {
-                        return cons(new_at, lat);
-                    } else {
-                        return cons(car(lat), f(new_at, old_at, cdr(lat)));
-                    }
-                }
-                f.arity = 3;
-                return f;
-            }
-            insertL_curry.arity = 1;
-
-            assert([ insertL_curry, "iseq", "e", "d", [ "a", "b", "c", "d", "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "e", "d", "f", "g", "d", "h" ] ]);
-
-
-            function insertR_curry(test) {
-                function f (new_at, old_at, lat) {
-                    if (isnull(lat)) {
-                        return lat;
-                    } else if (this[test](old_at, car(lat))) {
-                        return cons(old_at, cons(new_at, cdr(lat)));
-                    } else {
-                        return cons(car(lat), f(new_at, old_at, cdr(lat)));
-                    }
-                }
-                f.arity = 3;
-                return f;
-            }
-            insertR_curry.arity = 1;
-
-            assert([ insertR_curry, "iseq", "e", "d", [ "a", "b", "c", "d", "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "d", "e", "f", "g", "d", "h" ] ]);
-
-
-            output("p131");
-
-            function insert_g(test, transform) {
-                function f (new_at, old_at, lat) {
-                    if (isnull(lat)) {
-                        return lat;
-                    } else if (this[test](old_at, car(lat))) {
-                        return this[transform](old_at, new_at, lat);
-                    } else {
-                        return cons(car(lat), f(new_at, old_at, cdr(lat)));
-                    }
-                }
-                f.arity = 3;
-                return f;
-            }
-            insert_g.arity = 2;
-
-            function insertL_transform(old_at, new_at, lat) {
-                return cons(new_at, lat);
-            }
-
-            assert([ insert_g, "iseq", "insertL_transform", "e", "d", [ "a", "b", "c", "d", "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "e", "d", "f", "g", "d", "h" ] ]);
-
-            function insertR_transform(old_at, new_at, lat) {
-                return cons(old_at, cons(new_at, cdr(lat)));
-            }
-
-            assert([ insert_g, "iseq", "insertR_transform", "e", "d", [ "a", "b", "c", "d", "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "d", "e", "f", "g", "d", "h" ] ]);
-
-
-            output("p133");
-
-            function subst_transform(old_at, new_at, lat) {
-                return cons(new_at, cdr(lat));
-            }
-
-            assert([ insert_g, "iseq", "subst_transform", "e", "d", [ "a", "b", "c", "d", "f", "g", "d", "h" ] ], [ [ "a", "b", "c", "e", "f", "g", "d", "h" ] ]);
-
-            output("p134");
-
-            function plus(num1, num2) {
-                return num1 + num2;
-            }
-            plus.arity = 2;
-
-            function multiply(num1, num2) {
-                return num1 * num2;
-            }
-            multiply.arity = 2;
-
-            function power(num1, num2) {
-                return Math.pow(num1, num2);
-            }
-            power.arity = 2;
-
-            function atom_to_function(at) {
-                if (at === "+") {
-                    return plus;
-                } else if (at === "x") {
-                    return multiply;
-                } else {
-                    return power;
-                }
-            }
-            atom_to_function.arity = 1;
-
-            output("p135");
-
-            assert([ atom_to_function, "+", 5, 3 ], [ 8 ]);
-
-            function value(aexp) {
-                if (isatom(aexp)) {
-                    return aexp;
-                } else {
-                    return atom_to_function(car(cdr(aexp)))(value(car(aexp)), value(car(cdr(cdr(aexp)))));
-                }
-            }
-            value.arity = 1;
-
-            assert([ value, 13 ], [ 13 ]);
-
-            assert([ value, [ 1, "+", 3 ] ], [ 4 ]);
-
-            assert([ value, [ 2, "x", 3 ] ], [ 6 ]);
-
-            assert([ value, [ 2, "^", 3 ] ], [ 8 ]);
-
-            assert([ value, [ 1, "+", [ 3, "^", 4 ] ] ], [ 82 ]);
-
-            function multirember_f(test, atom, lat) {
-                if (isnull(lat)) {
-                    return lat;
-                } else if (this[test](atom, car(lat))) {
-                    return multirember_f(test, atom, cdr(lat));
-                } else {
-                    return cons(car(lat), multirember_f(test, atom, cdr(lat)));
-                }
-            }
-            multirember_f.arity = 3;
-
-            assert([ multirember_f, "iseq", "tuna", [ "shrimp", "salad", "tuna", "salad", "and", "tuna" ] ], [ [ "shrimp", "salad", "salad", "and" ] ]);
-
-            output("p136");
-
-            function multirember_eq(atom, lat) {
-                return multirember_f("iseq", atom, lat);
-            }
-            multirember_eq.arity = 2;
-
-            assert([ multirember_eq, "tuna", [ "shrimp", "salad", "tuna", "salad", "and", "tuna" ] ], [ [ "shrimp", "salad", "salad", "and" ] ]);
-
-            function multirember_test(test, lat) {
-                if (isnull(lat)) {
-                    return lat;
-                } else if (this[test](lat)) {
-                    return multirember_test(test, cdr(lat));
-                } else {
-                    return cons(car(lat), multirember_test(test, cdr(lat)));
-                }
-            }
-            multirember_test.arity = 2;
-
-            function iseq_tuna(lat) {
-                return iseq("tuna", car(lat));
-            }
-            iseq_tuna.arity = 1;
-
-            assert([ multirember_test, "iseq_tuna", [ "shrimp", "salad", "tuna", "salad", "and", "tuna" ] ], [ [ "shrimp", "salad", "salad", "and" ] ]);
-
-
-            var that = this;
-
-            function multirember_and_co(a, lat, col) {
-                if (typeof col === "string") {
-                    col = that[col];
-                }
-                if (isnull(lat)) {
-                    console.log("col: " + col);
-                    return col([], []);
-                } else if (iseq(car(lat), a)) {
-                    console.log("iseq in " + lat.length);
-                    return multirember_and_co(a, cdr(lat), function(newlat, seen) {
-                        console.log("iseq out " + lat.length);
-                        return col(newlat, cons(car(lat), seen));
-                    });
-                } else {
-                    console.log("not iseq in " + lat.length);
-                    return multirember_and_co(a, cdr(lat), function(newlat, seen) {
-                        console.log("not iseq out " + lat.length);
-                        return col(cons(car(lat), newlat), seen);
-                    });
-                }
-            }
-            multirember_and_co.arity = 3;
-
-            function a_friend(x, y) {
-                return x;
-                // return isnull(y);
-                // return "x: " + JSON.stringify(x) + ", y: " + JSON.stringify(y);
-            }
-            a_friend.arity = 2;
-
-            assert([ multirember_and_co, "tuna", [ "strawberries", "tuna", "and", "swordfish" ], "a_friend" ], [ [ "strawberries", "and", "swordfish" ] ]);
-
-            // console.log(multirember_and_co("tuna", [ "strawberries", "tuna", "and", "swordfish" ], a_friend));
         </script>
     </body>
 </html>
