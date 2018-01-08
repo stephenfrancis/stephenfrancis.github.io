@@ -11,19 +11,20 @@ number of plusses and minuses you need to do this?
 */
 
 
-function recurse(input, output, sum) {
+function recurse(input, output, sum, curr_term, sign) {
   var this_digit;
   if (input.length === 0) {
+    sum += (sign * curr_term);
     if (sum === 100) {
       console.log(output + " = " + sum);
     }
     return;
   }
   this_digit = input.shift();
-  recurse(input.slice(0), output + " + " + this_digit, sum + this_digit);
-  recurse(input.slice(0), output + " - " + this_digit, sum - this_digit);
-  recurse(input.slice(0), output + this_digit, (sum * 10) + this_digit);
+  recurse(input.slice(0), output + " + " + this_digit, sum + (sign * curr_term), this_digit, +1);
+  recurse(input.slice(0), output + " - " + this_digit, sum + (sign * curr_term), this_digit, -1);
+  recurse(input.slice(0), output + this_digit, sum, (curr_term * 10) + this_digit, sign);
 }
 
 
-recurse([2, 3, 4, 5, 6, 7, 8, 9], "1", 1);
+recurse([2, 3, 4, 5, 6, 7, 8, 9], "1", 0, 1, +1);
